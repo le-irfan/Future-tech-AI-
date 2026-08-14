@@ -427,9 +427,9 @@ nav ul li a.active::after {
     }
 
     .cardf {
-      flex: 0 0 190px;
-      width: 190px;
-      height: 220px;
+      flex: 0 0 200px;
+      width: 200px;
+      height: 300px;
 
       padding: 25px;
 
