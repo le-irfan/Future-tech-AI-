@@ -368,17 +368,18 @@ nav ul li a.active::after {
   align-items: center;
   gap: 8px;
 }
+.card .learn-more {
+    display:inline-block;
+    margin-top: 10px;
+    padding: 10px 18px;
 
-.card button{
-    margin-top:10px;
-    padding:10px 18px;
+    border: 1px solid var(--cyan);
+    background: transparent;
+    color: var(--cyan);
 
-    border:1px solid var(--cyan);
-    background:none;
-    color:var(--cyan);
-    
-    border-radius:7px;
-    cursor:pointer;
+    border-radius: 7px;
+    cursor: pointer;
+    text-decoration: none;
 }
 
     .containerf {
@@ -427,9 +428,9 @@ nav ul li a.active::after {
     }
 
     .cardf {
-      flex: 0 0 200px;
-      width: 200px;
-      height: 300px;
+      flex: 0 0 190px;
+      width: 190px;
+      height: 220px;
 
       padding: 25px;
 
