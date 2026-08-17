@@ -8,9 +8,7 @@
 }
 
 
-/* =========================
-   BASIC
-========================= */
+
 
 *{
     box-sizing:border-box;
@@ -30,9 +28,7 @@ body{
 }
 
 
-/* =========================
-   NAVBAR
-========================= */
+
 
 .navbar{
     position:fixed;
@@ -89,9 +85,7 @@ body{
 }
 
 
-/* =========================
-   MAIN PAGE
-========================= */
+
 
 main{
     padding-top:100px;
@@ -139,9 +133,7 @@ main{
 }
 
 
-/* =========================
-   CARDS
-========================= */
+
 
 .cards{
     max-width:1200px;
@@ -156,7 +148,7 @@ main{
 }
 
 
-/* EVERY CARD */
+
 
 .card{
     position:relative;
@@ -186,7 +178,7 @@ main{
 }
 
 
-/* glowing line at top */
+
 
 .card::before{
     content:"";
@@ -212,7 +204,7 @@ main{
 }
 
 
-/* hover */
+
 
 .card:hover{
     transform:translateY(-10px);
@@ -229,9 +221,7 @@ main{
 }
 
 
-/* =========================
-   CARD ICON
-========================= */
+
 
 .card-icon{
     width:70px;
@@ -264,9 +254,7 @@ main{
 }
 
 
-/* =========================
-   CARD TEXT
-========================= */
+
 
 .card h3{
     color:white;
@@ -285,9 +273,7 @@ main{
 }
 
 
-/* =========================
-   PAGE CONTENT
-========================= */
+
 
 section{
     scroll-margin-top:100px;
@@ -302,9 +288,7 @@ h3{
 }
 
 
-/* =========================
-   FOOTER
-========================= */
+
 
 footer{
     padding:50px 7%;
@@ -333,9 +317,7 @@ footer a:hover{
 }
 
 
-/* =========================
-   MOBILE
-========================= */
+
 
 @media(max-width:1000px){
 
