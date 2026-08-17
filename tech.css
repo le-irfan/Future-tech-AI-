@@ -368,17 +368,18 @@ nav ul li a.active::after {
   align-items: center;
   gap: 8px;
 }
+.card .learn-more {
+    display:inline-block;
+    margin-top: 10px;
+    padding: 10px 18px;
 
-.card button{
-    margin-top:10px;
-    padding:10px 18px;
+    border: 1px solid var(--cyan);
+    background: transparent;
+    color: var(--cyan);
 
-    border:1px solid var(--cyan);
-    background:none;
-    color:var(--cyan);
-    
-    border-radius:7px;
-    cursor:pointer;
+    border-radius: 7px;
+    cursor: pointer;
+    text-decoration: none;
 }
 
     .containerf {
@@ -413,7 +414,6 @@ nav ul li a.active::after {
       animation: spin 25s linear infinite;
     }
 
-    /* Pause when mouse is over the cards */
     .marquee-container:hover .marquee-track {
       animation-play-state: paused;
     }
@@ -427,9 +427,9 @@ nav ul li a.active::after {
     }
 
     .cardf {
-      flex: 0 0 190px;
-      width: 190px;
-      height: 220px;
+      flex: 0 0 230px;
+      width: 230px;
+      height: 280px;
 
       padding: 25px;
 
