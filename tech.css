@@ -580,9 +580,7 @@ body.secret-mode .hero {
 body.secret-mode .hero-text {
     color: var(--muted);
 }
-body.secret-mode .cardf{
-    
-}
+
 body.secret-mode .card {
     background: var(--card);
     border-color: rgba(0, 0, 0, 0.08);
@@ -618,4 +616,36 @@ body.secret-mode .core {
 body.secret-mode .i {
     color: var(--text);
     border-color: var(--cyan);
+}
+/* FUTURE TECHNOLOGY LIGHT MODE */
+
+body.secret-mode .containerf h2 {
+    color: #007c91;
+}
+
+body.secret-mode .containerf p {
+    color: #4d7cff;
+}
+
+body.secret-mode .cardf {
+    background: #ffffff;
+    color: #07111f;
+    border: 1px solid rgba(0, 124, 145, 0.18);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+body.secret-mode .cardf h3 {
+    color: #07111f;
+}
+
+body.secret-mode .cardf p {
+    color: #526477;
+}
+
+body.secret-mode .iconf {
+    color: #007c91;
+    background: rgba(0, 124, 145, 0.08);
+}
+body.secret-mode .iconf i {
+    color: #007c91 !important;
 }
