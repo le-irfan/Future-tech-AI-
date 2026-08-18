@@ -1,0 +1,95 @@
+
+        :root {
+            --bg: #050b16;
+            --card: #0d1b2e;
+            --cyan: #00e5ff;
+            --blue: #4d7cff;
+            --text: #ffffff;
+            --muted: #9eafc4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 70px 8% 40px;
+        }
+
+        .hero img {
+            width: 100%;
+            max-width: 900px;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 1px solid var(--blue);
+        }
+
+        .hero p {
+            margin-top: 30px;
+            color: var(--cyan);
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .hero h1 {
+            margin-top: 10px;
+            font-size: 42px;
+        }
+
+        .content {
+            max-width: 1000px;
+            margin: auto;
+            padding: 40px 8% 80px;
+        }
+
+        .impact-box {
+            background: var(--card);
+            border: 1px solid var(--blue);
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 25px;
+            transition: 0.3s ease;
+        }
+
+        .impact-box:hover {
+            border-color: var(--cyan);
+            transform: translateY(-5px);
+        }
+
+        .impact-box h2 {
+            color: var(--cyan);
+            margin-bottom: 12px;
+        }
+
+        .impact-box p {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 22px;
+            background: var(--bg);
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            color: var(--cyan);
+            
+        }
+    
