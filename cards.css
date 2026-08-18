@@ -38,7 +38,7 @@ body{
     width:100%;
     min-height:75px;
 
-    padding:18px 7%;
+    padding:18px;
 
     display:flex;
     align-items:center;
@@ -67,7 +67,7 @@ body{
 
 .navbar nav{
     display:flex;
-    gap:22px;
+    gap:18px;
     flex-wrap:wrap;
     justify-content:flex-end;
 }
@@ -76,8 +76,26 @@ body{
     color:#dce7f5;
     text-decoration:none;
     font-size:14px;
-
+    font-weight:600;
+    padding:8px 4px;
     transition:.3s;
+}
+
+body.secret-mode .navbar{
+    background:rgba(242,247,251,.95);
+    border-bottom:1px solid rgba(0,124,145,.15);
+}
+
+body.secret-mode .logo{
+    color:#07111f;
+}
+
+body.secret-mode .navbar nav a{
+    color:#263746;
+}
+
+body.secret-mode .navbar nav a:hover{
+    color:var(--cyan);
 }
 
 .navbar nav a:hover{
@@ -374,4 +392,72 @@ footer a:hover{
         font-size:42px;
     }
 
+}
+/* SECRET LIGHT MODE */
+
+body.secret-mode {
+    --bg: #f2f7fb;
+    --card: #ffffff;
+    --cyan: #007c91;
+    --blue: #315bd6;
+    --text: #07111f;
+    --muted: #526477;
+
+    background: var(--bg);
+    color: var(--text);
+}
+
+body.secret-mode .card {
+    background: var(--card);
+    color: var(--text);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+body.secret-mode .card h1,
+body.secret-mode .card h2,
+body.secret-mode .card h3,
+body.secret-mode .card h4 {
+    color: var(--cyan);
+}
+
+body.secret-mode .card p {
+    color: var(--muted);
+}
+
+body.secret-mode .card-icon {
+    filter: none;
+}
+
+body.secret-mode .learn-more {
+    color: var(--cyan);
+    border-color: var(--cyan);
+}
+
+body.secret-mode .learn-more:hover {
+    background: var(--cyan);
+    color: white;
+}
+
+body.secret-mode .container {
+    color: var(--text);
+}
+
+body.secret-mode .container p {
+    color: var(--muted);
+}
+
+body.secret-mode .container h1,
+body.secret-mode .container h2 {
+    color: var(--cyan);
+}
+
+body.secret-mode a {
+    color: var(--cyan);
+}
+body.secret-mode h1,
+body.secret-mode h1 span {
+    color: var(--cyan);
+    -webkit-text-fill-color: var(--cyan);
+    background: none;
 }

@@ -294,12 +294,20 @@ nav ul li a.active::after {
     background:var(--cyan);
     color:#001018;
 }
-
+.n:hover{
+    transform:translateY(-3px);
+    border-color:var(--cyan);
+    box-shadow:0 15px 40px rgba(0,229,255,.1);
+}
 .i{
     color:white;
     border:1px solid var(--cyan);
 }
-
+.i:hover{
+    transform:translateY(-3px);
+    border-color:var(--cyan);
+    box-shadow:0 15px 40px rgba(0,229,255,.1);
+}
 .ai{
     padding:100px 7% 80px;
 }
@@ -571,3 +579,84 @@ nav ul li a.active::after {
         animation-duration: 20s;
       }
     }
+
+body.secret-mode {
+    --bg: #f2f7fb;
+    --card: #ffffff;
+    --cyan: #007c91;
+    --blue: #315bd6;
+    --text: #07111f;
+    --muted: #526477;
+
+    background: var(--bg);
+    color: var(--text);
+}
+
+body.secret-mode header {
+    background: rgba(242, 247, 251, 0.92);
+    border-bottom-color: rgba(0, 124, 145, 0.2);
+}
+
+body.secret-mode header > a {
+    color: var(--text);
+}
+
+body.secret-mode nav a {
+    color: #263746;
+}
+
+body.secret-mode nav a:hover {
+    color: var(--cyan);
+}
+
+body.secret-mode .hero {
+    background:
+        radial-gradient(
+            circle at 80% 50%,
+            rgba(0, 124, 145, 0.12),
+            transparent 35%
+        );
+}
+
+body.secret-mode .hero-text {
+    color: var(--muted);
+}
+body.secret-mode .cardf{
+    
+}
+body.secret-mode .card {
+    background: var(--card);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+body.secret-mode .card p {
+    color: var(--muted);
+}
+
+body.secret-mode .robot-head {
+    border-color: var(--cyan);
+    box-shadow: 0 0 25px rgba(0, 124, 145, 0.3);
+}
+
+body.secret-mode .robot-body {
+    border-color: var(--cyan);
+}
+
+body.secret-mode .eye {
+    background: var(--cyan);
+    box-shadow: 0 0 20px var(--cyan);
+}
+
+body.secret-mode .core {
+    border-color: var(--cyan);
+    color: var(--cyan);
+}
+
+body.secret-mode .core {
+    animation: pulse 2s infinite;
+}
+body.secret-mode .i {
+    color: var(--text);
+    border-color: var(--cyan);
+}

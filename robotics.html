@@ -16,7 +16,6 @@
     </a>
 
     <nav>
-        <a href="index.html">Home</a>
         <a href="machine-learning.html">Machine Learning</a>
         <a href="robotics.html">Robotics</a>
         <a href="computer-vision.html">Computer Vision</a>
@@ -66,7 +65,7 @@
 
         <div class="card">
 
-            <div class="card-icon">🧑‍⚕️</div>
+            <div class="card-icon">👨‍⚕️</div>
 
             <h3>Medical Robots</h3>
 
@@ -153,6 +152,10 @@
    
 
 </footer>
-
+    <script>
+        if (localStorage.getItem("futureTechTheme") === "light") {
+            document.body.classList.add("secret-mode");
+        }
+    </script>
 </body>
 </html>
