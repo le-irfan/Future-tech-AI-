@@ -649,3 +649,81 @@ body.secret-mode .iconf {
 body.secret-mode .iconf i {
     color: #007c91 !important;
 }
+.impact {
+    padding: 80px 8%;
+    background: var(--bg);
+    text-align: center;
+}
+.impact > div:first-child p {
+    color: var(--cyan);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+}
+.impact > div:first-child h2 {
+    font-size: 40px;
+    margin: 0 0 45px;
+    color: var(--text);
+}
+.cardsi {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+.cardi {
+    width: 500px;
+    padding: 35px;
+    background: var(--card);
+    border-radius: 20px;
+    text-align: left;
+    border: 1px solid var(--blue);
+    box-shadow: 0 10px 30px rgba(0, 229, 255, 0.08);
+    transition: 0.3s ease;
+}
+.cardi:hover {
+    transform: translateY(-10px);
+    border-color: var(--cyan);
+    box-shadow: 0 18px 40px rgba(0, 229, 255, 0.2);
+}
+.cardi h2 {
+    
+    font-size: 24px;
+    margin-bottom: 25px;
+    color: var(--text);
+}
+.cardi ul {
+    padding-left: 20px;
+    margin: 0;
+}
+.cardi li {
+    margin: 15px 0;
+    color: var(--muted);
+    line-height: 1.6;
+}
+.cardi li::marker {
+    color: var(--cyan);
+}
+.spp {
+     color: var(--cyan);
+    text-shadow: 0 0 15px var(--cyan);
+}
+.impact-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 22px;
+    background: var(--bg);
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+
+.impact-btn:hover {
+    background: var(--cyan);
+    color: var(--bg);
+    transform: translateY(-3px);
+}
