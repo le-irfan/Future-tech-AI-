@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="b.css">
+</head>
+<body>
+    <section class="blog-post">
+  <h2>The Future of Technology</h2>
+
+  <p class="date">August 1, 2026</p>
+
+  <p>
+    Technology is changing our world every day. From artificial intelligence
+    to smart devices, new inventions are making our lives easier, faster,
+    and more connected.
+  </p>
+
+  <h3>Artificial Intelligence</h3>
+  <p>
+    Artificial intelligence is one of the most exciting technologies of the
+    future. AI can help people learn, solve problems, analyze information,
+    and complete tasks more efficiently.
+  </p>
+
+  <h3>Space Technology</h3>
+  <p>
+    Space technology is also developing quickly. New spacecraft and robots
+    could help scientists explore the Moon, Mars, and other parts of our
+    solar system.
+  </p>
+
+  <h3>Clean Energy</h3>
+  <p>
+    Future technology can also help protect our planet. Solar power, wind
+    energy, electric vehicles, and advanced batteries could create cleaner
+    and more sustainable energy systems.
+  </p>
+
+  <h3>What Will the Future Look Like?</h3>
+  <p>
+    The future may bring smarter cities, advanced robots, powerful computers,
+    and new ways of communicating. Technology will continue to create new
+    opportunities, but it should always be developed and used responsibly.
+  </p>
+
+  <h3>Conclusion</h3>
+  <p>
+    The future of technology is full of possibilities. Artificial intelligence,
+    robotics, clean energy, and space exploration could change the way we live,
+    work, and understand the world around us.
+  </p>
+</section>
+<section class="comments">
+  <h2> Comments</h2>
+
+  <form class="comment-form">
+    <input type="text" placeholder="Your name" required>
+
+    <textarea placeholder="Write your comment..." rows="5" required></textarea>
+
+    <button type="submit">Post Comment</button>
+  </form>
+
+</section>
+<script>
+const form = document.querySelector(".comment-form");
+const commentsSection = document.querySelector(".comments");
+
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const name = form.querySelector("input").value;
+    const comment = form.querySelector("textarea").value;
+
+    const newComment = document.createElement("div");
+    newComment.classList.add("comment");
+
+    newComment.innerHTML = `
+        <h3>${name}</h3>
+        <p>${comment}</p>
+    `;
+
+    commentsSection.appendChild(newComment);
+
+    form.reset();
+});
+</script>
+</body>
+</html>
