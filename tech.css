@@ -196,13 +196,13 @@ nav ul li a.active::after {
     max-width:700px;
 }
 
-.title{
+.small-title{
     color:var(--cyan);
     letter-spacing:4px;
-    font-size:13px;
+    font-size:20px;
     margin-bottom:20px;
+    padding-left: 30px;
 }
-
 .intro h1{
     font-size:clamp(45px,7vw,85px);
     line-height:1;
