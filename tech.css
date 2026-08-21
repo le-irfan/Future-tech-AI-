@@ -482,8 +482,7 @@ body.secret-mode {
     --text: #07111f;
     --muted: #775252;
 
-    background: var(--bg);
-    color: var(--text);
+   
 }
 
 body.secret-mode header {
@@ -496,7 +495,7 @@ body.secret-mode header > a {
 }
 
 body.secret-mode nav a {
-    color: #263746;
+    color: #462626;
 }
 
 body.secret-mode nav a:hover {
@@ -511,9 +510,7 @@ body.secret-mode .hero {
             transparent 35%
         );
 }
-body.secret-mode .intelligent{
-        text-shadow: 0 0 10px var(--cyan);
-}
+
 body.secret-mode .hero-text {
     color: var(--muted);
 }
