@@ -24,7 +24,7 @@
             <li><a href="#technology">Technology</a></li>
             <li><a href="#impact">Impact</a></li>
             <li><a href="#timeline">Time Line</a></li>
-            <li><a href="b.html">blog</a></li>
+            <li><a href="b.html">Blog</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
@@ -473,23 +473,23 @@ Intelligent assistants can understand language and help users complete tasks.
 
 </section>
 <script>
-const robot = document.getElementById("secretRobot");
+    const secretRobot = document.getElementById("secretRobot");
 
-let clickTimer;
+    if (localStorage.getItem("futureTechTheme") === "light") {
+        document.body.classList.add("secret-mode");
+    }
 
-robot.addEventListener("click", function () {
-    clearTimeout(clickTimer);
+    secretRobot.addEventListener("dblclick", function () {
 
-    clickTimer = setTimeout(function () {
-        document.body.classList.toggle("white-mode");
-    }, 250);
-});
+        document.body.classList.toggle("secret-mode");
 
-robot.addEventListener("dblclick", function () {
-    clearTimeout(clickTimer);
+        if (document.body.classList.contains("secret-mode")) {
+            localStorage.setItem("futureTechTheme", "light");
+        } else {
+            localStorage.setItem("futureTechTheme", "dark");
+        }
 
-    document.body.classList.toggle("secret-mode");
-});
-</script>
+    });
+  </script>
 </body>
 </html>

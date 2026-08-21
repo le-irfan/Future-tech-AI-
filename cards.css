@@ -393,15 +393,14 @@ footer a:hover{
     }
 
 }
-/* SECRET LIGHT MODE */
 
 body.secret-mode {
     --bg: #f2f7fb;
     --card: #ffffff;
-    --cyan: #007c91;
-    --blue: #315bd6;
+    --cyan: #ff0000;
+    --blue: #e00000;
     --text: #07111f;
-    --muted: #526477;
+    --muted: #775252;
 
     background: var(--bg);
     color: var(--text);

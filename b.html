@@ -6,6 +6,13 @@
     <link rel="stylesheet" href="b.css">
 </head>
 <body>
+  <header class="navbar">
+
+    <a class="logo" href="tech.html">
+        Future<span>Tech</span> X
+    </a>
+
+  </header>
     <section class="blog-post">
   <h2>The Future of Technology</h2>
 
@@ -68,13 +75,19 @@
 const form = document.querySelector(".comment-form");
 const commentsSection = document.querySelector(".comments");
 
+if (localStorage.getItem("futureTechTheme") === "light") {
+    document.body.classList.add("secret-mode");
+}
+
 form.addEventListener("submit", function(event) {
+
     event.preventDefault();
 
     const name = form.querySelector("input").value;
     const comment = form.querySelector("textarea").value;
 
     const newComment = document.createElement("div");
+
     newComment.classList.add("comment");
 
     newComment.innerHTML = `
