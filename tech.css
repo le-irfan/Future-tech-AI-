@@ -502,19 +502,10 @@ body.secret-mode nav a:hover {
     color: var(--cyan);
 }
 
-body.secret-mode .hero {
-    background:
-        radial-gradient(
-            circle at 80% 50%,
-            rgba(255, 0, 0, 0.12),
-            transparent 35%
-        );
+body.secret-mode .intelligent{
+    text-shadow: 0 0 10px var(--cyan);
 }
-
-body.secret-mode .hero-text {
-    color: var(--muted);
-}
-
+  
 body.secret-mode .card {
     background: var(--card);
     border-color: rgba(0, 0, 0, 0.08);
