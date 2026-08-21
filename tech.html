@@ -24,7 +24,6 @@
             <li><a href="#technology">Technology</a></li>
             <li><a href="#impact">Impact</a></li>
             <li><a href="#timeline">Time Line</a></li>
-            <li><a href="#team">Team</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
@@ -75,7 +74,7 @@ Future Tech
 
     <div class="robot-body">
 
-        <div class="core" id="secretCore">
+        <div class="core">
            AI
         </div>
 
@@ -183,8 +182,7 @@ Future Tech
              </div>
         </div>
     </section>
-<!-- ================= naba ================= -->
-
+   <section id="technology" style="height: 100px;"></section>
   <div class="containerf">
     <p>FUTURE TECHNOLOGY</p>
     <h2>What Comes Next!</h2>
@@ -193,9 +191,6 @@ Future Tech
   <div class="marquee-container">
 
     <div class="marquee-track">
-
-  
-
       <div class="group">
 
         <div class="cardf">
@@ -255,9 +250,6 @@ Future Tech
         </div>
 
       </div>
-
-
-      <!-- ================= SET 2 ================= -->
 
       <div class="group" aria-hidden="true">
 
@@ -321,7 +313,7 @@ Future Tech
 
     </div>
   </div>
-  <section class="impact">
+  <section class="impact" id="impact">
     <div>
       <p>
         OUR IMPACT
@@ -441,12 +433,10 @@ Future Tech
   <script>
     const secretRobot = document.getElementById("secretRobot");
 
-    // Keep the saved theme when the page loads
     if (localStorage.getItem("futureTechTheme") === "light") {
         document.body.classList.add("secret-mode");
     }
 
-    // Double-click the robot to switch theme
     secretRobot.addEventListener("dblclick", function () {
 
         document.body.classList.toggle("secret-mode");

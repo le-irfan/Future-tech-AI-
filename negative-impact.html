@@ -57,9 +57,13 @@
             </p>
         </div>
 
-        <a href="tech.html" class="back-btn">← Back to Impacts</a>
+        <a href="tech.html#impact" class="back-btn">← Back to Impacts</a>
 
     </section>
-
+    <script>
+        if (localStorage.getItem("futureTechTheme") === "light") {
+            document.body.classList.add("secret-mode");
+        }
+    </script>
 </body>
 </html>

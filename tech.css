@@ -823,9 +823,6 @@ body.secret-mode .iconf i {
     line-height: 1.7;
 }
 
-
-/* LIGHT MODE */
-
 body.secret-mode .timeline-container::before {
     background: var(--cyan);
 }
@@ -850,7 +847,7 @@ body.secret-mode .timeline-content p {
 }
 
 
-/* MOBILE */
+
 
 @media(max-width:700px) {
 
