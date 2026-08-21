@@ -511,7 +511,9 @@ body.secret-mode .hero {
             transparent 35%
         );
 }
-
+body.secret-mode .intelligent{
+        text-shadow: 0 0 10px var(--cyan);
+}
 body.secret-mode .hero-text {
     color: var(--muted);
 }
@@ -534,7 +536,6 @@ body.secret-mode .robot-head {
 body.secret-mode .robot-body {
     border-color: var(--cyan);
 }
-
 body.secret-mode .eye {
     background: var(--cyan);
     box-shadow: 0 0 20px var(--cyan);
