@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 75px;
+}
 :root{
     --bg:#050b16;
     --card:#0d1b2e;
@@ -12,6 +16,7 @@ body{
     font-family:'Poppins',sans-serif;
     background:var(--bg);
     color:var(--text);
+    transition:background 0.3s ease,color 0.3s ease;
 }
 * {
     box-sizing: border-box;
@@ -208,6 +213,7 @@ nav ul li a.active {
 .n{
     background:var(--cyan);
     color:#001018;
+    transition:.3s;
 }
 .n:hover{
     transform:translateY(-3px);
@@ -217,6 +223,7 @@ nav ul li a.active {
 .i{
     color:white;
     border:1px solid var(--cyan);
+    transition:.3s;
 }
 .i:hover{
     transform:translateY(-3px);
@@ -305,11 +312,12 @@ nav ul li a.active {
     text-decoration: none;
 }
 
-    .containerf {
+.containerf {
     width: 100%;
     text-align: center;
     margin: 50px 0;
     padding: 0 20px;
+    padding-top: 15vh;
 }
 
 .containerf p{
@@ -450,7 +458,6 @@ body.secret-mode {
     --text: #07111f;
     --muted: #775252;
 
-   
 }
 
 body.secret-mode header {
@@ -507,7 +514,20 @@ body.secret-mode .i {
     color: var(--text);
     border-color: var(--cyan);
 }
-
+body.secret-mode .i:hover {
+    color: var(--text);
+    border-color: var(--cyan);
+    box-shadow: 0 15px 40px rgba(255, 0, 0, 0.2);
+}
+body.secret-mode .n {
+    background: var(--cyan);
+    color: white;
+}
+body.secret-mode .n:hover {
+    background: var(--cyan);
+    color: white;
+    box-shadow: 0 15px 40px rgba(255, 0, 0, 0.2);
+}
 body.secret-mode .containerf h2 {
     color: var(--cyan);
 }
@@ -575,6 +595,15 @@ body.secret-mode .impact-btn:hover {
     border-color: #cc0000;
     color: #ffffff;
     box-shadow: 0 0 20px rgba(255, 0, 0, 0.35);
+}
+body.secret-mode .card.hni:hover,
+body.secret-mode .cardf:hover,
+body.secret-mode .timeline-card:hover,
+body.secret-mode .blog-card:hover,
+body.secret-mode .cardi:hover {
+    box-shadow: 0 15px 40px rgba(255, 0, 0, 0.5);
+    border:1px solid var(--cyan);
+
 }
 .impact {
     padding: 80px 8%;
