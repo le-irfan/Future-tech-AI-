@@ -2,22 +2,32 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
+const { Pool } = require("pg");
 
 const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
-const DATA_DIR = path.join(ROOT, "data");
-const DB_FILE = path.join(DATA_DIR, "comments.json");
 
-fs.mkdirSync(DATA_DIR, { recursive: true });
-if (!fs.existsSync(DB_FILE)) fs.writeFileSync(DB_FILE, "[]", "utf8");
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
+});
 
-function readComments() {
-    try { return JSON.parse(fs.readFileSync(DB_FILE, "utf8")); }
-    catch { return []; }
-}
-
-function writeComments(comments) {
-    fs.writeFileSync(DB_FILE, JSON.stringify(comments, null, 2), "utf8");
+async function setupDatabase() {
+    if (!process.env.DATABASE_URL) {
+        console.warn("DATABASE_URL is not set. Comments database is unavailable.");
+        return;
+    }
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS comments (
+            id TEXT PRIMARY KEY,
+            post TEXT NOT NULL,
+            name TEXT NOT NULL,
+            comment TEXT NOT NULL,
+            "createdAt" TIMESTAMPTZ NOT NULL,
+            "updatedAt" TIMESTAMPTZ
+        )
+    `);
+    console.log("PostgreSQL database ready");
 }
 
 function sendJson(res, status, data) {
@@ -59,8 +69,17 @@ const server = http.createServer(async (req, res) => {
     const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
 
     if (url.pathname === "/api/comments" && req.method === "GET") {
-        const post = (url.searchParams.get("post") || "ai").trim();
-        return sendJson(res, 200, readComments().filter(c => c.post === post));
+        try {
+            const post = (url.searchParams.get("post") || "ai").trim();
+            const result = await pool.query(
+                'SELECT id, post, name, comment, "createdAt", "updatedAt" FROM comments WHERE post = $1 ORDER BY "createdAt" ASC',
+                [post]
+            );
+            return sendJson(res, 200, result.rows);
+        } catch (error) {
+            console.error(error);
+            return sendJson(res, 500, { error: "Database unavailable." });
+        }
     }
 
     if (url.pathname === "/api/comments" && req.method === "POST") {
@@ -71,39 +90,51 @@ const server = http.createServer(async (req, res) => {
             const post = String(input.post || "ai").trim();
             if (!name || !text || !post) return sendJson(res, 400, { error: "Name, comment and post are required." });
             if (name.length > 50 || text.length > 1000 || post.length > 50) return sendJson(res, 400, { error: "Input is too long." });
-            const comments = readComments();
             const newComment = { id: crypto.randomUUID(), post, name, comment: text, createdAt: new Date().toISOString() };
-            comments.push(newComment);
-            writeComments(comments);
+            await pool.query(
+                'INSERT INTO comments (id, post, name, comment, "createdAt") VALUES ($1, $2, $3, $4, $5)',
+                [newComment.id, newComment.post, newComment.name, newComment.comment, newComment.createdAt]
+            );
             return sendJson(res, 201, newComment);
-        } catch { return sendJson(res, 400, { error: "Invalid request." }); }
+        } catch (error) {
+            console.error(error);
+            return sendJson(res, 400, { error: "Invalid request or database error." });
+        }
     }
 
     const commentMatch = url.pathname.match(/^\/api\/comments\/([^/]+)$/);
     if (commentMatch && (req.method === "PUT" || req.method === "DELETE")) {
         const id = decodeURIComponent(commentMatch[1]);
-        const comments = readComments();
-        const index = comments.findIndex(c => c.id === id);
-        if (index === -1) return sendJson(res, 404, { error: "Comment not found." });
-
-        if (req.method === "DELETE") {
-            const deleted = comments.splice(index, 1)[0];
-            writeComments(comments);
-            return sendJson(res, 200, deleted);
-        }
 
         try {
+            if (req.method === "DELETE") {
+                const result = await pool.query(
+                    'DELETE FROM comments WHERE id = $1 RETURNING id, post, name, comment, "createdAt", "updatedAt"',
+                    [id]
+                );
+                if (result.rows.length === 0) return sendJson(res, 404, { error: "Comment not found." });
+                return sendJson(res, 200, result.rows[0]);
+            }
+
             const input = JSON.parse(await body(req));
-            const name = String(input.name || comments[index].name).trim();
+            const current = await pool.query('SELECT name FROM comments WHERE id = $1', [id]);
+            if (current.rows.length === 0) return sendJson(res, 404, { error: "Comment not found." });
+
+            const name = String(input.name || current.rows[0].name).trim();
             const text = String(input.comment || "").trim();
             if (!name || !text) return sendJson(res, 400, { error: "Name and comment are required." });
             if (name.length > 50 || text.length > 1000) return sendJson(res, 400, { error: "Input is too long." });
-            comments[index].name = name;
-            comments[index].comment = text;
-            comments[index].updatedAt = new Date().toISOString();
-            writeComments(comments);
-            return sendJson(res, 200, comments[index]);
-        } catch { return sendJson(res, 400, { error: "Invalid request." }); }
+
+            const updatedAt = new Date().toISOString();
+            const result = await pool.query(
+                'UPDATE comments SET name = $1, comment = $2, "updatedAt" = $3 WHERE id = $4 RETURNING id, post, name, comment, "createdAt", "updatedAt"',
+                [name, text, updatedAt, id]
+            );
+            return sendJson(res, 200, result.rows[0]);
+        } catch (error) {
+            console.error(error);
+            return sendJson(res, 400, { error: "Invalid request or database error." });
+        }
     }
 
     if (url.pathname === "/api/health") return sendJson(res, 200, { status: "ok" });
@@ -117,4 +148,5 @@ const server = http.createServer(async (req, res) => {
     sendJson(res, 404, { error: "Not found" });
 });
 
+setupDatabase().catch(error => console.error("Database setup failed:", error));
 server.listen(PORT, () => console.log(`FutureTechX server running on port ${PORT}`));
