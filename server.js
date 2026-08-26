@@ -12,11 +12,8 @@ fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(DB_FILE)) fs.writeFileSync(DB_FILE, "[]", "utf8");
 
 function readComments() {
-    try {
-        return JSON.parse(fs.readFileSync(DB_FILE, "utf8"));
-    } catch {
-        return [];
-    }
+    try { return JSON.parse(fs.readFileSync(DB_FILE, "utf8")); }
+    catch { return []; }
 }
 
 function writeComments(comments) {
@@ -27,26 +24,14 @@ function sendJson(res, status, data) {
     res.writeHead(status, {
         "Content-Type": "application/json; charset=utf-8",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type"
     });
     res.end(JSON.stringify(data));
 }
 
 function sendFile(res, filePath) {
-    const types = {
-        ".html": "text/html; charset=utf-8",
-        ".css": "text/css; charset=utf-8",
-        ".js": "application/javascript; charset=utf-8",
-        ".json": "application/json; charset=utf-8",
-        ".svg": "image/svg+xml",
-        ".png": "image/png",
-        ".jpg": "image/jpeg",
-        ".jpeg": "image/jpeg",
-        ".webp": "image/webp",
-        ".ico": "image/x-icon"
-    };
-
+    const types = { ".html":"text/html; charset=utf-8", ".css":"text/css; charset=utf-8", ".js":"application/javascript; charset=utf-8", ".json":"application/json; charset=utf-8", ".svg":"image/svg+xml", ".png":"image/png", ".jpg":"image/jpeg", ".jpeg":"image/jpeg", ".webp":"image/webp", ".ico":"image/x-icon" };
     fs.readFile(filePath, (error, data) => {
         if (error) {
             res.writeHead(error.code === "ENOENT" ? 404 : 500);
@@ -71,13 +56,11 @@ function body(req) {
 
 const server = http.createServer(async (req, res) => {
     if (req.method === "OPTIONS") return sendJson(res, 204, {});
-
     const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
 
     if (url.pathname === "/api/comments" && req.method === "GET") {
         const post = (url.searchParams.get("post") || "ai").trim();
-        const comments = readComments().filter(comment => comment.post === post);
-        return sendJson(res, 200, comments);
+        return sendJson(res, 200, readComments().filter(c => c.post === post));
     }
 
     if (url.pathname === "/api/comments" && req.method === "POST") {
@@ -86,47 +69,52 @@ const server = http.createServer(async (req, res) => {
             const name = String(input.name || "").trim();
             const text = String(input.comment || "").trim();
             const post = String(input.post || "ai").trim();
-
-            if (!name || !text || !post) {
-                return sendJson(res, 400, { error: "Name, comment and post are required." });
-            }
-            if (name.length > 50 || text.length > 1000 || post.length > 50) {
-                return sendJson(res, 400, { error: "Input is too long." });
-            }
-
+            if (!name || !text || !post) return sendJson(res, 400, { error: "Name, comment and post are required." });
+            if (name.length > 50 || text.length > 1000 || post.length > 50) return sendJson(res, 400, { error: "Input is too long." });
             const comments = readComments();
-            const newComment = {
-                id: crypto.randomUUID(),
-                post,
-                name,
-                comment: text,
-                createdAt: new Date().toISOString()
-            };
-
+            const newComment = { id: crypto.randomUUID(), post, name, comment: text, createdAt: new Date().toISOString() };
             comments.push(newComment);
             writeComments(comments);
             return sendJson(res, 201, newComment);
-        } catch {
-            return sendJson(res, 400, { error: "Invalid request." });
-        }
+        } catch { return sendJson(res, 400, { error: "Invalid request." }); }
     }
 
-    if (url.pathname === "/api/health") {
-        return sendJson(res, 200, { status: "ok" });
+    const commentMatch = url.pathname.match(/^\/api\/comments\/([^/]+)$/);
+    if (commentMatch && (req.method === "PUT" || req.method === "DELETE")) {
+        const id = decodeURIComponent(commentMatch[1]);
+        const comments = readComments();
+        const index = comments.findIndex(c => c.id === id);
+        if (index === -1) return sendJson(res, 404, { error: "Comment not found." });
+
+        if (req.method === "DELETE") {
+            const deleted = comments.splice(index, 1)[0];
+            writeComments(comments);
+            return sendJson(res, 200, deleted);
+        }
+
+        try {
+            const input = JSON.parse(await body(req));
+            const name = String(input.name || comments[index].name).trim();
+            const text = String(input.comment || "").trim();
+            if (!name || !text) return sendJson(res, 400, { error: "Name and comment are required." });
+            if (name.length > 50 || text.length > 1000) return sendJson(res, 400, { error: "Input is too long." });
+            comments[index].name = name;
+            comments[index].comment = text;
+            comments[index].updatedAt = new Date().toISOString();
+            writeComments(comments);
+            return sendJson(res, 200, comments[index]);
+        } catch { return sendJson(res, 400, { error: "Invalid request." }); }
     }
+
+    if (url.pathname === "/api/health") return sendJson(res, 200, { status: "ok" });
 
     if (req.method === "GET") {
         let requested = decodeURIComponent(url.pathname);
         if (requested === "/") requested = "/tech.html";
         const safePath = path.normalize(path.join(ROOT, requested));
-        if (safePath.startsWith(ROOT) && fs.existsSync(safePath) && fs.statSync(safePath).isFile()) {
-            return sendFile(res, safePath);
-        }
+        if (safePath.startsWith(ROOT) && fs.existsSync(safePath) && fs.statSync(safePath).isFile()) return sendFile(res, safePath);
     }
-
     sendJson(res, 404, { error: "Not found" });
 });
 
-server.listen(PORT, () => {
-    console.log(`FutureTechX server running on port ${PORT}`);
-});
+server.listen(PORT, () => console.log(`FutureTechX server running on port ${PORT}`));
