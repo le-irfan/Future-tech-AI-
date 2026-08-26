@@ -4,7 +4,8 @@ const path = require("path");
 const crypto = require("crypto");
 
 const PORT = process.env.PORT || 3000;
-const DATA_DIR = path.join(__dirname, "data");
+const ROOT = __dirname;
+const DATA_DIR = path.join(ROOT, "data");
 const DB_FILE = path.join(DATA_DIR, "comments.json");
 
 fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -30,6 +31,30 @@ function sendJson(res, status, data) {
         "Access-Control-Allow-Headers": "Content-Type"
     });
     res.end(JSON.stringify(data));
+}
+
+function sendFile(res, filePath) {
+    const types = {
+        ".html": "text/html; charset=utf-8",
+        ".css": "text/css; charset=utf-8",
+        ".js": "application/javascript; charset=utf-8",
+        ".json": "application/json; charset=utf-8",
+        ".svg": "image/svg+xml",
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".webp": "image/webp",
+        ".ico": "image/x-icon"
+    };
+
+    fs.readFile(filePath, (error, data) => {
+        if (error) {
+            res.writeHead(error.code === "ENOENT" ? 404 : 500);
+            return res.end(error.code === "ENOENT" ? "Not found" : "Server error");
+        }
+        res.writeHead(200, { "Content-Type": types[path.extname(filePath).toLowerCase()] || "application/octet-stream" });
+        res.end(data);
+    });
 }
 
 function body(req) {
@@ -90,9 +115,18 @@ const server = http.createServer(async (req, res) => {
         return sendJson(res, 200, { status: "ok" });
     }
 
+    if (req.method === "GET") {
+        let requested = decodeURIComponent(url.pathname);
+        if (requested === "/") requested = "/tech.html";
+        const safePath = path.normalize(path.join(ROOT, requested));
+        if (safePath.startsWith(ROOT) && fs.existsSync(safePath) && fs.statSync(safePath).isFile()) {
+            return sendFile(res, safePath);
+        }
+    }
+
     sendJson(res, 404, { error: "Not found" });
 });
 
 server.listen(PORT, () => {
-    console.log(`FutureTechX database server running on port ${PORT}`);
+    console.log(`FutureTechX server running on port ${PORT}`);
 });
