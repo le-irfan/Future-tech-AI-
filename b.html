@@ -63,7 +63,7 @@
     <div id="commentList"></div>
 </section>
 <script>
-const API_URL = "/api/comments";
+const API_URL = "http://localhost:3000/api/comments";
 const form = document.querySelector(".comment-form");
 const commentList = document.querySelector("#commentList");
 const statusBox = document.querySelector("#commentStatus");
@@ -103,6 +103,7 @@ async function loadComments() {
         const response = await fetch(`${API_URL}?post=${encodeURIComponent(postId)}`);
         if (!response.ok) throw new Error();
         renderComments(await response.json());
+        statusBox.textContent = "Database connected.";
     } catch {
         statusBox.textContent = "Comments database is not connected yet.";
     }
