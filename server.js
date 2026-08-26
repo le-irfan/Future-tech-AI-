@@ -65,7 +65,15 @@ function body(req) {
 }
 
 const server = http.createServer(async (req, res) => {
-    if (req.method === "OPTIONS") return sendJson(res, 204, {});
+    if (req.method === "OPTIONS") {
+        res.writeHead(204, {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type"
+        });
+        return res.end();
+    }
+
     const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
 
     if (url.pathname === "/api/comments" && req.method === "GET") {
