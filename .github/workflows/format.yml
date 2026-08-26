@@ -27,3 +27,5 @@ jobs:
           git add -A
           git diff --cached --quiet || git commit -m "Format project code"
           git push
+
+# Trigger repository formatting
