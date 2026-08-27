@@ -89,53 +89,53 @@
 
         .back-btn:hover {
             color: var(--cyan);
-            
+
         }
 
-body.secret-mode {
-    --bg: #f2f7fb;
-    --card: #ffffff;
-    --cyan: #ff0000;
-    --blue: #e00000;
-    --text: #07111f;
-    --muted: #775252;
-    
-    background: var(--bg);
-    color: var(--text);
-}
+        body.secret-mode {
+            --bg: #f2f7fb;
+            --card: #ffffff;
+            --cyan: #ff0000;
+            --blue: #e00000;
+            --text: #07111f;
+            --muted: #775252;
 
-body.secret-mode .hero h1 {
-    color: var(--text);
-}
+            background: var(--bg);
+            color: var(--text);
+        }
 
-body.secret-mode .hero p {
-    color: var(--cyan);
-}
+        body.secret-mode .hero h1 {
+            color: var(--text);
+        }
 
-body.secret-mode .hero img {
-    border-color: var(--blue);
-}
+        body.secret-mode .hero p {
+            color: var(--cyan);
+        }
 
-body.secret-mode .impact-box {
-    background: var(--card);
-    border-color: rgba(0, 124, 145, 0.2);
-}
+        body.secret-mode .hero img {
+            border-color: var(--blue);
+        }
 
-body.secret-mode .impact-box h2 {
-    color: var(--cyan);
-}
+        body.secret-mode .impact-box {
+            background: var(--card);
+            border-color: rgba(0, 124, 145, 0.2);
+        }
 
-body.secret-mode .impact-box p {
-    color: var(--muted);
-}
+        body.secret-mode .impact-box h2 {
+            color: var(--cyan);
+        }
 
-body.secret-mode .back-btn {
-    background: #ffffff;
-    color: var(--text);
-    border: 1px solid var(--cyan);
-}
+        body.secret-mode .impact-box p {
+            color: var(--muted);
+        }
 
-body.secret-mode .back-btn:hover {
-    background: var(--cyan);
-    color: white;
-}
+        body.secret-mode .back-btn {
+            background: #ffffff;
+            color: var(--text);
+            border: 1px solid var(--cyan);
+        }
+
+        body.secret-mode .back-btn:hover {
+            background: var(--cyan);
+            color: white;
+        }
