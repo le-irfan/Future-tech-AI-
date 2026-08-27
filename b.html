@@ -1,45 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FutureTech X - Blog</title>
     <link rel="stylesheet" href="b.css">
 </head>
+
 <body>
-<header class="navbar"><a class="logo" href="tech.html">Future<span>Tech</span> X</a></header>
-<section class="blog-post" id="ai"><span class="category">Technology</span><h2>How AI Is Changing the World</h2><p class="date">Haron Endale · August 21, 2026</p><p>Artificial intelligence is changing the way people interact with technology. From websites and applications to education and business, AI is becoming an important part of modern digital experiences.</p><h3>Artificial Intelligence</h3><p>AI allows computers to perform tasks that normally require human intelligence. These tasks can include understanding information, recognizing patterns, generating content, and helping people solve problems.</p><h3>AI and Web Development</h3><p>AI is also changing web development. Developers can use AI-powered tools to generate ideas, understand code, find errors, and improve websites. This can make the development process faster and more efficient.</p><h3>The Future of AI</h3><p>As artificial intelligence continues to develop, it may become even more useful in education, business, science, design, and software development.</p><h3>Conclusion</h3><p>AI is becoming one of the most important technologies of our time. When developed and used responsibly, it can create new opportunities and help people solve difficult problems.</p></section>
-<section class="blog-post" id="design"><span class="category">Design</span><h2>Modern Web Design Trends</h2><p class="date">Irfan Jibril · August 20, 2026</p><p>Web design continues to change as new technologies and user expectations develop. Modern websites focus on clean layouts, accessibility, responsiveness, and enjoyable user experiences.</p><h3>Clean Layouts</h3><p>Simple layouts make websites easier to understand. Good spacing, readable typography, and organized sections help visitors quickly find the information they need.</p><h3>Responsive Design</h3><p>People visit websites using phones, tablets, laptops, and desktop computers. Responsive design allows a website to adapt to different screen sizes.</p><h3>Interactive Experiences</h3><p>Animations, transitions, buttons, and interactive elements can make websites feel more engaging when they are used carefully.</p><h3>Conclusion</h3><p>Modern web design is about more than making a website look good. A successful website should also be fast, accessible, responsive, and easy to use.</p></section>
-<section class="blog-post" id="development"><span class="category">Development</span><h2>The Future of Web Development</h2><p class="date">Nebyou Jantirar · August 19, 2026</p><p>Web development is constantly evolving. New frameworks, programming languages, development tools, and artificial intelligence systems are changing how developers build websites and applications.</p><h3>New Development Tools</h3><p>Modern developers have access to powerful tools that can simplify coding, debugging, testing, and deployment.</p><h3>Artificial Intelligence</h3><p>AI is becoming increasingly useful for developers. It can help with code suggestions, debugging, documentation, and learning new technologies.</p><h3>Responsive Websites</h3><p>Websites need to work well across many devices. Responsive design will continue to be an important part of web development.</p><h3>Conclusion</h3><p>The future of web development will combine programming skills, creative thinking, modern frameworks, and new technologies such as artificial intelligence.</p></section>
-<section class="comments" id="comments">
-    <h2>Comments</h2>
-    <form class="comment-form">
-        <input type="text" id="commentName" placeholder="Your name" maxlength="50" required>
-        <textarea id="commentText" placeholder="Write your comment..." rows="5" maxlength="1000" required></textarea>
-        <button type="submit">Post Comment</button>
-    </form>
-    <div id="commentStatus" aria-live="polite"></div>
-    <div id="commentList"></div>
-</section>
-<script>
-const API_URL = "/api/comments";
-const form = document.querySelector(".comment-form");
-const commentList = document.querySelector("#commentList");
-const statusBox = document.querySelector("#commentStatus");
-const postId = window.location.hash.replace("#", "") || "ai";
+    <header class="navbar"><a class="logo" href="tech.html">Future<span>Tech</span> X</a></header>
+    <section class="blog-post" id="ai"><span class="category">Technology</span>
+        <h2>How AI Is Changing the World</h2>
+        <p class="date">Haron Endale · August 21, 2026</p>
+        <p>Artificial intelligence is changing the way people interact with technology. From websites and applications
+            to education and business, AI is becoming an important part of modern digital experiences.</p>
+        <h3>Artificial Intelligence</h3>
+        <p>AI allows computers to perform tasks that normally require human intelligence. These tasks can include
+            understanding information, recognizing patterns, generating content, and helping people solve problems.</p>
+        <h3>AI and Web Development</h3>
+        <p>AI is also changing web development. Developers can use AI-powered tools to generate ideas, understand code,
+            find errors, and improve websites. This can make the development process faster and more efficient.</p>
+        <h3>The Future of AI</h3>
+        <p>As artificial intelligence continues to develop, it may become even more useful in education, business,
+            science, design, and software development.</p>
+        <h3>Conclusion</h3>
+        <p>AI is becoming one of the most important technologies of our time. When developed and used responsibly, it
+            can create new opportunities and help people solve difficult problems.</p>
+    </section>
+    <section class="blog-post" id="design"><span class="category">Design</span>
+        <h2>Modern Web Design Trends</h2>
+        <p class="date">Irfan Jibril · August 20, 2026</p>
+        <p>Web design continues to change as new technologies and user expectations develop. Modern websites focus on
+            clean layouts, accessibility, responsiveness, and enjoyable user experiences.</p>
+        <h3>Clean Layouts</h3>
+        <p>Simple layouts make websites easier to understand. Good spacing, readable typography, and organized sections
+            help visitors quickly find the information they need.</p>
+        <h3>Responsive Design</h3>
+        <p>People visit websites using phones, tablets, laptops, and desktop computers. Responsive design allows a
+            website to adapt to different screen sizes.</p>
+        <h3>Interactive Experiences</h3>
+        <p>Animations, transitions, buttons, and interactive elements can make websites feel more engaging when they are
+            used carefully.</p>
+        <h3>Conclusion</h3>
+        <p>Modern web design is about more than making a website look good. A successful website should also be fast,
+            accessible, responsive, and easy to use.</p>
+    </section>
+    <section class="blog-post" id="development"><span class="category">Development</span>
+        <h2>The Future of Web Development</h2>
+        <p class="date">Nebyou Jantirar · August 19, 2026</p>
+        <p>Web development is constantly evolving. New frameworks, programming languages, development tools, and
+            artificial intelligence systems are changing how developers build websites and applications.</p>
+        <h3>New Development Tools</h3>
+        <p>Modern developers have access to powerful tools that can simplify coding, debugging, testing, and deployment.
+        </p>
+        <h3>Artificial Intelligence</h3>
+        <p>AI is becoming increasingly useful for developers. It can help with code suggestions, debugging,
+            documentation, and learning new technologies.</p>
+        <h3>Responsive Websites</h3>
+        <p>Websites need to work well across many devices. Responsive design will continue to be an important part of
+            web development.</p>
+        <h3>Conclusion</h3>
+        <p>The future of web development will combine programming skills, creative thinking, modern frameworks, and new
+            technologies such as artificial intelligence.</p>
+    </section>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+        <form class="comment-form">
+            <input type="text" id="commentName" placeholder="Your name" maxlength="50" required>
+            <textarea id="commentText" placeholder="Write your comment..." rows="5" maxlength="1000"
+                required></textarea>
+            <button type="submit">Post Comment</button>
+        </form>
+        <div id="commentStatus" aria-live="polite"></div>
+        <div id="commentList"></div>
+    </section>
+    <script>
+        const API_URL = "/api/comments";
+        const form = document.querySelector(".comment-form");
+        const commentList = document.querySelector("#commentList");
+        const statusBox = document.querySelector("#commentStatus");
+        const postId = window.location.hash.replace("#", "") || "ai";
 
-if (localStorage.getItem("futureTechTheme") === "light") document.body.classList.add("secret-mode");
+        if (localStorage.getItem("futureTechTheme") === "light") document.body.classList.add("secret-mode");
 
-function escapeHtml(value) { const div = document.createElement("div"); div.textContent = value; return div.innerHTML; }
+        function escapeHtml(value) { const div = document.createElement("div"); div.textContent = value; return div.innerHTML; }
 
-function renderComments(comments) {
-    commentList.innerHTML = "";
-    if (!comments.length) { commentList.innerHTML = '<p class="no-comments">No comments yet. Be the first one.</p>'; return; }
-    comments.forEach(comment => {
-        const item = document.createElement("div");
-        item.className = "comment";
-        const date = new Date(comment.createdAt).toLocaleString();
-        item.innerHTML = `
+        function renderComments(comments) {
+            commentList.innerHTML = "";
+            if (!comments.length) { commentList.innerHTML = '<p class="no-comments">No comments yet. Be the first one.</p>'; return; }
+            comments.forEach(comment => {
+                const item = document.createElement("div");
+                item.className = "comment";
+                const date = new Date(comment.createdAt).toLocaleString();
+                item.innerHTML = `
             <h3>${escapeHtml(comment.name)}</h3>
             <p>${escapeHtml(comment.comment).replace(/\n/g, "<br>")}</p>
             <small>${escapeHtml(date)}${comment.updatedAt ? " · edited" : ""}</small>
@@ -47,63 +101,64 @@ function renderComments(comments) {
                 <button type="button" onclick="editComment('${comment.id}', '${encodeURIComponent(comment.name)}', '${encodeURIComponent(comment.comment)}')">Edit</button>
                 <button type="button" onclick="deleteComment('${comment.id}')">Delete</button>
             </div>`;
-        commentList.appendChild(item);
-    });
-}
+                commentList.appendChild(item);
+            });
+        }
 
-async function loadComments() {
-    try {
-        const response = await fetch(`${API_URL}?post=${encodeURIComponent(postId)}`);
-        if (!response.ok) throw new Error();
-        renderComments(await response.json());
-        statusBox.textContent = "Database connected.";
-    } catch { statusBox.textContent = "Comments database is not connected yet."; }
-}
+        async function loadComments() {
+            try {
+                const response = await fetch(`${API_URL}?post=${encodeURIComponent(postId)}`);
+                if (!response.ok) throw new Error();
+                renderComments(await response.json());
+                statusBox.textContent = "Database connected.";
+            } catch { statusBox.textContent = "Comments database is not connected yet."; }
+        }
 
-async function editComment(id, encodedName, encodedComment) {
-    const oldName = decodeURIComponent(encodedName);
-    const oldComment = decodeURIComponent(encodedComment);
-    const name = prompt("Edit your name:", oldName);
-    if (name === null) return;
-    const comment = prompt("Edit your comment:", oldComment);
-    if (comment === null) return;
-    try {
-        const response = await fetch(`${API_URL}/${encodeURIComponent(id)}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, comment }) });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || "Could not edit comment");
-        statusBox.textContent = "Comment updated!";
+        async function editComment(id, encodedName, encodedComment) {
+            const oldName = decodeURIComponent(encodedName);
+            const oldComment = decodeURIComponent(encodedComment);
+            const name = prompt("Edit your name:", oldName);
+            if (name === null) return;
+            const comment = prompt("Edit your comment:", oldComment);
+            if (comment === null) return;
+            try {
+                const response = await fetch(`${API_URL}/${encodeURIComponent(id)}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, comment }) });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Could not edit comment");
+                statusBox.textContent = "Comment updated!";
+                loadComments();
+            } catch (error) { statusBox.textContent = error.message; }
+        }
+
+        async function deleteComment(id) {
+            if (!confirm("Are you sure you want to delete this comment?")) return;
+            try {
+                const response = await fetch(`${API_URL}/${encodeURIComponent(id)}`, { method: "DELETE" });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Could not delete comment");
+                statusBox.textContent = "Comment deleted!";
+                loadComments();
+            } catch (error) { statusBox.textContent = error.message; }
+        }
+
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const name = document.querySelector("#commentName").value.trim();
+            const comment = document.querySelector("#commentText").value.trim();
+            if (!name || !comment) return;
+            statusBox.textContent = "Posting...";
+            try {
+                const response = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, comment, post: postId }) });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Could not post comment");
+                form.reset();
+                statusBox.textContent = "Comment posted!";
+                await loadComments();
+            } catch { statusBox.textContent = "Could not post the comment. Make sure the database server is running."; }
+        });
+
         loadComments();
-    } catch (error) { statusBox.textContent = error.message; }
-}
-
-async function deleteComment(id) {
-    if (!confirm("Are you sure you want to delete this comment?")) return;
-    try {
-        const response = await fetch(`${API_URL}/${encodeURIComponent(id)}`, { method: "DELETE" });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || "Could not delete comment");
-        statusBox.textContent = "Comment deleted!";
-        loadComments();
-    } catch (error) { statusBox.textContent = error.message; }
-}
-
-form.addEventListener("submit", async function(event) {
-    event.preventDefault();
-    const name = document.querySelector("#commentName").value.trim();
-    const comment = document.querySelector("#commentText").value.trim();
-    if (!name || !comment) return;
-    statusBox.textContent = "Posting...";
-    try {
-        const response = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, comment, post: postId }) });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || "Could not post comment");
-        form.reset();
-        statusBox.textContent = "Comment posted!";
-        await loadComments();
-    } catch { statusBox.textContent = "Could not post the comment. Make sure the database server is running."; }
-});
-
-loadComments();
-</script>
+    </script>
 </body>
+
 </html>
