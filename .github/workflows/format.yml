@@ -21,6 +21,29 @@ jobs:
         with:
           node-version: 20
 
+      - name: Add shared favicon and theme initialization
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          for path in Path('.').glob('*.html'):
+              text = path.read_text(encoding='utf-8')
+
+              # Make every page use the same FutureTechX favicon.
+              favicon = '<link rel="icon" href="favicon.svg" type="image/svg+xml" />'
+              text = re.sub(r'\s*<link[^>]*rel=["\']icon["\'][^>]*>\s*', '\n', text, flags=re.I)
+              text = re.sub(r'(</title>)', r'\1\n    ' + favicon, text, count=1, flags=re.I)
+
+              # Keep the dark theme as the default on every page, while
+              # respecting the existing double-click light-mode preference.
+              theme = '''\n    <script>\n      if (localStorage.getItem("futureTechTheme") === "light") {\n        document.body.classList.add("secret-mode");\n      } else {\n        document.body.classList.remove("secret-mode");\n      }\n    </script>\n'''
+              text = re.sub(r'\s*<script>\s*if \(localStorage\.getItem\("futureTechTheme"\) === "light"\).*?</script>\s*', '\n', text, flags=re.I | re.S)
+              text = re.sub(r'(</body>)', theme + r'\1', text, count=1, flags=re.I)
+
+              path.write_text(text, encoding='utf-8')
+          PY
+
       - name: Format HTML, CSS, JS and JSON
         run: npx --yes prettier@3.6.2 --write "**/*.{html,css,js,json}" --ignore-path .gitignore
 
@@ -33,6 +56,6 @@ jobs:
             echo "No formatting changes needed."
             exit 0
           fi
-          git commit -m "Format project code"
+          git commit -m "Apply shared favicon and dark theme"
           git pull --rebase origin main
           git push origin HEAD:main
