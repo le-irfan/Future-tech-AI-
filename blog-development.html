@@ -1,5 +1,76 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>The Future of Web Development - FutureTechX</title><link rel="icon" href="favicon.png" /><link rel="stylesheet" href="b.css" /></head><body><header class="navbar"><a class="logo" href="tech.html">Future<span>Tech</span>X</a></header>
-<section class="blog-post"><span class="category">Development</span><h2>The Future of Web Development</h2><p class="date">Nebyou Jantirar · August 19, 2026</p><p>Web development is constantly evolving. New frameworks, programming languages, development tools, and artificial intelligence systems are changing how developers build websites and applications.</p><h3>New Development Tools</h3><p>Modern developers have access to powerful tools that can simplify coding, debugging, testing, and deployment.</p><h3>Artificial Intelligence</h3><p>AI is becoming increasingly useful for developers. It can help with code suggestions, debugging, documentation, and learning new technologies.</p><h3>Responsive Websites</h3><p>Websites need to work well across many devices. Responsive design will continue to be an important part of web development.</p><h3>Conclusion</h3><p>The future of web development will combine programming skills, creative thinking, modern frameworks, and new technologies such as artificial intelligence.</p></section>
-<section class="comments" id="comments"><h2>Comments</h2><form class="comment-form"><input type="text" id="commentName" placeholder="Your name" maxlength="50" required><textarea id="commentText" placeholder="Write your comment..." rows="5" maxlength="1000" required></textarea><button type="submit">Post Comment</button></form><div id="commentStatus" aria-live="polite"></div><div id="commentList"></div></section>
-<div class="back-to-blogs"><a href="tech.html#blogs" class="read-more">← Back to Blogs</a></div><script src="b.js"></script><script>const postId="development";</script></body></html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Future of Web Development - FutureTechX</title>
+    <link rel="icon" href="favicon.png" />
+    <link rel="stylesheet" href="b.css" />
+  </head>
+  <body>
+    <header class="navbar"><a class="logo" href="tech.html">Future<span>Tech</span>X</a></header>
+    <section class="blog-post">
+      <span class="category">Development</span>
+      <h2>The Future of Web Development</h2>
+      <p class="date">Nebyou Jantirar · August 19, 2026</p>
+      <p>
+        Web development is constantly evolving. New frameworks, programming languages, development
+        tools, and artificial intelligence systems are changing how developers build websites and
+        applications.
+      </p>
+      <h3>New Development Tools</h3>
+      <p>
+        Modern developers have access to powerful tools that can simplify coding, debugging,
+        testing, and deployment.
+      </p>
+      <h3>Artificial Intelligence</h3>
+      <p>
+        AI is becoming increasingly useful for developers. It can help with code suggestions,
+        debugging, documentation, and learning new technologies.
+      </p>
+      <h3>Responsive Websites</h3>
+      <p>
+        Websites need to work well across many devices. Responsive design will continue to be an
+        important part of web development.
+      </p>
+      <h3>Conclusion</h3>
+      <p>
+        The future of web development will combine programming skills, creative thinking, modern
+        frameworks, and new technologies such as artificial intelligence.
+      </p>
+    </section>
+    <section class="comments" id="comments">
+      <h2>Comments</h2>
+      <form class="comment-form">
+        <input
+          type="text"
+          id="commentName"
+          placeholder="Your name"
+          maxlength="50"
+          required
+        /><textarea
+          id="commentText"
+          placeholder="Write your comment..."
+          rows="5"
+          maxlength="1000"
+          required
+        ></textarea
+        ><button type="submit">Post Comment</button>
+      </form>
+      <div id="commentStatus" aria-live="polite"></div>
+      <div id="commentList"></div>
+    </section>
+    <div class="back-to-blogs"><a href="tech.html#blogs" class="read-more">← Back to Blogs</a></div>
+    <script src="b.js"></script>
+    <script>
+      const postId = "development";
+    </script>
+    <script>
+      if (localStorage.getItem("futureTechTheme") === "light") {
+        document.body.classList.add("secret-mode");
+      } else {
+        document.body.classList.remove("secret-mode");
+      }
+    </script>
+  </body>
+</html>
