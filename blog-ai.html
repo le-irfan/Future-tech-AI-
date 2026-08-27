@@ -1,34 +1,167 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How AI Is Changing the World - FutureTechX</title>
-<link rel="icon" href="favicon.png">
-<link rel="stylesheet" href="b.css">
-</head>
-<body>
-<header class="navbar"><a class="logo" href="tech.html">Future<span>Tech</span>X</a></header>
-<section class="blog-post">
-<a href="tech.html#blog" class="read-more">← Back to Blogs</a>
-<span class="category">Technology</span>
-<h2>How AI Is Changing the World</h2>
-<p class="date">Haron Endale · August 21, 2026</p>
-<p>Artificial intelligence is changing the way people interact with technology. From websites and applications to education and business, AI is becoming an important part of modern digital experiences.</p>
-<h3>Artificial Intelligence</h3><p>AI allows computers to perform tasks that normally require human intelligence. These tasks can include understanding information, recognizing patterns, generating content, and helping people solve problems.</p>
-<h3>AI and Web Development</h3><p>AI is also changing web development. Developers can use AI-powered tools to generate ideas, understand code, find errors, and improve websites. This can make the development process faster and more efficient.</p>
-<h3>The Future of AI</h3><p>As artificial intelligence continues to develop, it may become even more useful in education, business, science, design, and software development.</p>
-<h3>Conclusion</h3><p>AI is becoming one of the most important technologies of our time. When developed and used responsibly, it can create new opportunities and help people solve difficult problems.</p>
-</section>
-<section class="comments" id="comments"><h2>Comments</h2><form class="comment-form"><input type="text" id="commentName" placeholder="Your name" maxlength="50" required><textarea id="commentText" placeholder="Write your comment..." rows="5" maxlength="1000" required></textarea><button type="submit">Post Comment</button></form><div id="commentStatus" aria-live="polite"></div><div id="commentList"></div></section>
-<script>
-const API_URL="/api/comments",form=document.querySelector(".comment-form"),commentList=document.querySelector("#commentList"),statusBox=document.querySelector("#commentStatus"),postId="ai";
-if(localStorage.getItem("futureTechTheme")==="light")document.body.classList.add("secret-mode");
-function escapeHtml(v){const d=document.createElement("div");d.textContent=v;return d.innerHTML}
-function renderComments(cs){commentList.innerHTML="";if(!cs.length){commentList.innerHTML='<p class="no-comments">No comments yet. Be the first one.</p>';return}cs.forEach(c=>{const i=document.createElement("div");i.className="comment";const d=new Date(c.createdAt).toLocaleString();i.innerHTML=`<h3>${escapeHtml(c.name)}</h3><p>${escapeHtml(c.comment).replace(/\n/g,"<br>")}</p><small>${escapeHtml(d)}${c.updatedAt?" · edited":""}</small><div class="comment-actions"><button type="button" onclick="editComment('${c.id}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.comment)}')">Edit</button><button type="button" onclick="deleteComment('${c.id}')">Delete</button></div>`;commentList.appendChild(i)})}
-async function loadComments(){try{const r=await fetch(`${API_URL}?post=${encodeURIComponent(postId)}`);if(!r.ok)throw new Error();renderComments(await r.json());statusBox.textContent="Database connected."}catch{statusBox.textContent="Comments database is not connected yet."}}
-async function editComment(id,n,c){const name=prompt("Edit your name:",decodeURIComponent(n));if(name===null)return;const comment=prompt("Edit your comment:",decodeURIComponent(c));if(comment===null)return;try{const r=await fetch(`${API_URL}/${encodeURIComponent(id)}`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,comment})}),d=await r.json();if(!r.ok)throw new Error(d.error||"Could not edit comment");statusBox.textContent="Comment updated!";loadComments()}catch(e){statusBox.textContent=e.message}}
-async function deleteComment(id){if(!confirm("Are you sure you want to delete this comment?"))return;try{const r=await fetch(`${API_URL}/${encodeURIComponent(id)}`,{method:"DELETE"}),d=await r.json();if(!r.ok)throw new Error(d.error||"Could not delete comment");statusBox.textContent="Comment deleted!";loadComments()}catch(e){statusBox.textContent=e.message}}
-form.addEventListener("submit",async e=>{e.preventDefault();const name=document.querySelector("#commentName").value.trim(),comment=document.querySelector("#commentText").value.trim();if(!name||!comment)return;statusBox.textContent="Posting...";try{const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,comment,post:postId})}),d=await r.json();if(!r.ok)throw new Error(d.error||"Could not post comment");form.reset();statusBox.textContent="Comment posted!";await loadComments()}catch{statusBox.textContent="Could not post the comment. Make sure the database server is running."}});loadComments();
-</script>
-</body></html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How AI Is Changing the World - FutureTechX</title>
+    <link rel="icon" href="favicon.png" />
+    <link rel="stylesheet" href="b.css" />
+  </head>
+  <body>
+    <header class="navbar"><a class="logo" href="tech.html">Future<span>Tech</span>X</a></header>
+    <section class="blog-post">
+      <a href="tech.html#blog" class="read-more">← Back to Blogs</a>
+      <span class="category">Technology</span>
+      <h2>How AI Is Changing the World</h2>
+      <p class="date">Haron Endale · August 21, 2026</p>
+      <p>
+        Artificial intelligence is changing the way people interact with technology. From websites
+        and applications to education and business, AI is becoming an important part of modern
+        digital experiences.
+      </p>
+      <h3>Artificial Intelligence</h3>
+      <p>
+        AI allows computers to perform tasks that normally require human intelligence. These tasks
+        can include understanding information, recognizing patterns, generating content, and helping
+        people solve problems.
+      </p>
+      <h3>AI and Web Development</h3>
+      <p>
+        AI is also changing web development. Developers can use AI-powered tools to generate ideas,
+        understand code, find errors, and improve websites. This can make the development process
+        faster and more efficient.
+      </p>
+      <h3>The Future of AI</h3>
+      <p>
+        As artificial intelligence continues to develop, it may become even more useful in
+        education, business, science, design, and software development.
+      </p>
+      <h3>Conclusion</h3>
+      <p>
+        AI is becoming one of the most important technologies of our time. When developed and used
+        responsibly, it can create new opportunities and help people solve difficult problems.
+      </p>
+    </section>
+    <section class="comments" id="comments">
+      <h2>Comments</h2>
+      <form class="comment-form">
+        <input
+          type="text"
+          id="commentName"
+          placeholder="Your name"
+          maxlength="50"
+          required
+        /><textarea
+          id="commentText"
+          placeholder="Write your comment..."
+          rows="5"
+          maxlength="1000"
+          required
+        ></textarea
+        ><button type="submit">Post Comment</button>
+      </form>
+      <div id="commentStatus" aria-live="polite"></div>
+      <div id="commentList"></div>
+    </section>
+    <script>
+      const API_URL = "/api/comments",
+        form = document.querySelector(".comment-form"),
+        commentList = document.querySelector("#commentList"),
+        statusBox = document.querySelector("#commentStatus"),
+        postId = "ai";
+      if (localStorage.getItem("futureTechTheme") === "light")
+        document.body.classList.add("secret-mode");
+      function escapeHtml(v) {
+        const d = document.createElement("div");
+        d.textContent = v;
+        return d.innerHTML;
+      }
+      function renderComments(cs) {
+        commentList.innerHTML = "";
+        if (!cs.length) {
+          commentList.innerHTML = '<p class="no-comments">No comments yet. Be the first one.</p>';
+          return;
+        }
+        cs.forEach((c) => {
+          const i = document.createElement("div");
+          i.className = "comment";
+          const d = new Date(c.createdAt).toLocaleString();
+          i.innerHTML = `<h3>${escapeHtml(c.name)}</h3><p>${escapeHtml(c.comment).replace(/\n/g, "<br>")}</p><small>${escapeHtml(d)}${c.updatedAt ? " · edited" : ""}</small><div class="comment-actions"><button type="button" onclick="editComment('${c.id}','${encodeURIComponent(c.name)}','${encodeURIComponent(c.comment)}')">Edit</button><button type="button" onclick="deleteComment('${c.id}')">Delete</button></div>`;
+          commentList.appendChild(i);
+        });
+      }
+      async function loadComments() {
+        try {
+          const r = await fetch(`${API_URL}?post=${encodeURIComponent(postId)}`);
+          if (!r.ok) throw new Error();
+          renderComments(await r.json());
+          statusBox.textContent = "Database connected.";
+        } catch {
+          statusBox.textContent = "Comments database is not connected yet.";
+        }
+      }
+      async function editComment(id, n, c) {
+        const name = prompt("Edit your name:", decodeURIComponent(n));
+        if (name === null) return;
+        const comment = prompt("Edit your comment:", decodeURIComponent(c));
+        if (comment === null) return;
+        try {
+          const r = await fetch(`${API_URL}/${encodeURIComponent(id)}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ name, comment }),
+            }),
+            d = await r.json();
+          if (!r.ok) throw new Error(d.error || "Could not edit comment");
+          statusBox.textContent = "Comment updated!";
+          loadComments();
+        } catch (e) {
+          statusBox.textContent = e.message;
+        }
+      }
+      async function deleteComment(id) {
+        if (!confirm("Are you sure you want to delete this comment?")) return;
+        try {
+          const r = await fetch(`${API_URL}/${encodeURIComponent(id)}`, { method: "DELETE" }),
+            d = await r.json();
+          if (!r.ok) throw new Error(d.error || "Could not delete comment");
+          statusBox.textContent = "Comment deleted!";
+          loadComments();
+        } catch (e) {
+          statusBox.textContent = e.message;
+        }
+      }
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = document.querySelector("#commentName").value.trim(),
+          comment = document.querySelector("#commentText").value.trim();
+        if (!name || !comment) return;
+        statusBox.textContent = "Posting...";
+        try {
+          const r = await fetch(API_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ name, comment, post: postId }),
+            }),
+            d = await r.json();
+          if (!r.ok) throw new Error(d.error || "Could not post comment");
+          form.reset();
+          statusBox.textContent = "Comment posted!";
+          await loadComments();
+        } catch {
+          statusBox.textContent =
+            "Could not post the comment. Make sure the database server is running.";
+        }
+      });
+      loadComments();
+    </script>
+
+    <script>
+      if (localStorage.getItem("futureTechTheme") === "light") {
+        document.body.classList.add("secret-mode");
+      } else {
+        document.body.classList.remove("secret-mode");
+      }
+    </script>
+  </body>
+</html>
