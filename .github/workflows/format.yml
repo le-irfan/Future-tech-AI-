@@ -16,11 +16,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
       - name: Add shared favicon, logo and theme initialization
         run: |
           python - <<'PY'
@@ -30,8 +25,8 @@ jobs:
           for path in Path('.').glob('*.html'):
               text = path.read_text(encoding='utf-8')
 
-              # Make every page use the same FutureTechX favicon.
-              favicon = '<link rel="icon" href="favicon.svg" type="image/svg+xml" />'
+              # Restore the original FutureTechX PNG favicon on every page.
+              favicon = '<link rel="icon" href="favicon.png" />'
               text = re.sub(r'\s*<link[^>]*rel=["\']icon["\'][^>]*>\s*', '\n', text, flags=re.I)
               text = re.sub(r'(</title>)', r'\1\n    ' + favicon, text, count=1, flags=re.I)
 
@@ -59,6 +54,6 @@ jobs:
             echo "No formatting changes needed."
             exit 0
           fi
-          git commit -m "Apply shared favicon, logo and dark theme"
+          git commit -m "Restore original favicon"
           git pull --rebase origin main
           git push origin HEAD:main
