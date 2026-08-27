@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Add shared favicon and theme initialization
+      - name: Add shared favicon, logo and theme initialization
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -34,6 +34,9 @@ jobs:
               favicon = '<link rel="icon" href="favicon.svg" type="image/svg+xml" />'
               text = re.sub(r'\s*<link[^>]*rel=["\']icon["\'][^>]*>\s*', '\n', text, flags=re.I)
               text = re.sub(r'(</title>)', r'\1\n    ' + favicon, text, count=1, flags=re.I)
+
+              # Make every nav logo match tech.html exactly.
+              text = re.sub(r'Future\s*<span>Tech</span>\s*X', 'Future<span>Tech</span>X', text, flags=re.I)
 
               # Keep the dark theme as the default on every page, while
               # respecting the existing double-click light-mode preference.
@@ -56,6 +59,6 @@ jobs:
             echo "No formatting changes needed."
             exit 0
           fi
-          git commit -m "Apply shared favicon and dark theme"
+          git commit -m "Apply shared favicon, logo and dark theme"
           git pull --rebase origin main
           git push origin HEAD:main
