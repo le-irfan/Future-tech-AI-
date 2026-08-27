@@ -502,7 +502,7 @@
                     </p>
 
                     <div class="b-read">
-                        <span class="n2">Haron endale <br>· Aug 21, 2026</span>
+                        <span class="n2">Haron Endale <br>· Aug 21, 2026</span>
                         <a href="b.html#ai" class="read-more">Read more →</a>
                     </div>
                 </div>
@@ -556,10 +556,6 @@
     <script>
         const secretRobot = document.getElementById("secretCore");
 
-        if (localStorage.getItem("futureTechTheme") === "light") {
-            document.body.classList.add("secret-mode");
-        }
-
         secretRobot.addEventListener("dblclick", function () {
 
             document.body.classList.toggle("secret-mode");
@@ -569,7 +565,9 @@
             } else {
                 localStorage.setItem("futureTechTheme", "dark");
             }
-
+            if (localStorage.getItem("futureTechTheme") === "light") {
+                document.body.classList.add("secret-mode");
+            }
         });
     </script>
 </body>

@@ -682,7 +682,10 @@ body.secret-mode .cardi:hover {
 
 .timeline-item.left {
     left: 0;
-    text-align: right
+    text-align: left
+}
+.timeline-item h3 {
+    text-align: center;
 }
 
 .timeline-item.right {
