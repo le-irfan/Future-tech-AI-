@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Negative Impacts of AI</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="impact.css" />
   </head>
 
@@ -56,9 +57,12 @@
 
       <a href="tech.html#impact" class="back-btn">← Back to Impacts</a>
     </section>
+
     <script>
       if (localStorage.getItem("futureTechTheme") === "light") {
         document.body.classList.add("secret-mode");
+      } else {
+        document.body.classList.remove("secret-mode");
       }
     </script>
   </body>

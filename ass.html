@@ -4,10 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   </head>
 
   <body>
     <button onclick="" id="idk">click me</button>
+
+    <script>
+      if (localStorage.getItem("futureTechTheme") === "light") {
+        document.body.classList.add("secret-mode");
+      } else {
+        document.body.classList.remove("secret-mode");
+      }
+    </script>
   </body>
   <script>
     but = document.getElementById("idk");
