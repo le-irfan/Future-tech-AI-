@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "FutureTechX web server and comments database API",
-  "main": "server.js",
+  "main": "server-fixed.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server-fixed.js"
   },
   "engines": {
     "node": ">=18"
