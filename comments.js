@@ -1,19 +1,11 @@
-const supabaseLib = window.supabase;
-const SUPABASE_URL = window.SUPABASE_URL;
-const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
+/* FutureTechX local comment system
+   No Supabase required.
+   Demo authentication/comments are stored in this browser only.
+*/
 
-const configured =
-  supabaseLib &&
-  typeof supabaseLib.createClient === "function" &&
-  typeof SUPABASE_URL === "string" &&
-  typeof SUPABASE_ANON_KEY === "string" &&
-  SUPABASE_URL.startsWith("https://") &&
-  !SUPABASE_URL.includes("YOUR_") &&
-  !SUPABASE_ANON_KEY.includes("YOUR_");
-
-const supabase = configured
-  ? supabaseLib.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-  : null;
+const USERS_KEY = "futuretechx_users";
+const SESSION_KEY = "futuretechx_session";
+const COMMENTS_KEY = "futuretechx_comments";
 
 function escapeHtml(value) {
   const div = document.createElement("div");
@@ -21,11 +13,40 @@ function escapeHtml(value) {
   return div.innerHTML;
 }
 
-function setStatus(message, isError = false) {
-  const status = document.getElementById("comments-status");
-  if (status) {
-    status.textContent = message;
-    status.dataset.error = isError ? "true" : "false";
+function uid() {
+  return window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function read(key, fallback) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key));
+    return value ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function write(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+function getUsers() {
+  return read(USERS_KEY, []);
+}
+
+function getComments() {
+  return read(COMMENTS_KEY, []);
+}
+
+function getSession() {
+  return read(SESSION_KEY, null);
+}
+
+function setStatus(message, error = false) {
+  const el = document.getElementById("comments-status");
+  if (el) {
+    el.textContent = message;
+    el.dataset.error = error ? "true" : "false";
   }
 }
 
@@ -34,28 +55,23 @@ function formatDate(value) {
   return Number.isNaN(date.getTime()) ? "" : date.toLocaleString();
 }
 
-function renderAuth(user) {
+function renderAuth() {
   const form = document.getElementById("comment-form");
   if (!form) return;
 
-  let authBox = document.getElementById("comment-auth");
-  if (!authBox) {
-    authBox = document.createElement("div");
-    authBox.id = "comment-auth";
-    form.parentNode.insertBefore(authBox, form);
+  let box = document.getElementById("comment-auth");
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "comment-auth";
+    form.parentNode.insertBefore(box, form);
   }
 
-  if (!supabase) {
-    form.style.display = "none";
-    authBox.innerHTML = `<p>Comments are currently unavailable. Please configure Supabase.</p>`;
-    return;
-  }
+  const session = getSession();
 
-  if (user) {
-    const displayName = user.user_metadata?.full_name || user.email || "User";
-    authBox.innerHTML = `
+  if (session) {
+    box.innerHTML = `
       <div class="auth-user">
-        Signed in as <strong>${escapeHtml(displayName)}</strong>
+        Signed in as <strong>${escapeHtml(session.name)}</strong>
         <button type="button" id="comment-logout">Log out</button>
       </div>`;
 
@@ -63,193 +79,194 @@ function renderAuth(user) {
 
     const nameInput = document.getElementById("comment-name");
     if (nameInput) {
-      nameInput.value = user.user_metadata?.full_name || "";
-      nameInput.readOnly = Boolean(user.user_metadata?.full_name);
+      nameInput.value = session.name;
+      nameInput.readOnly = true;
     }
 
-    document.getElementById("comment-logout")?.addEventListener("click", async () => {
-      const { error } = await supabase.auth.signOut();
-      if (error) setStatus(error.message, true);
-      else window.location.reload();
+    document.getElementById("comment-logout")?.addEventListener("click", () => {
+      localStorage.removeItem(SESSION_KEY);
+      renderAuth();
+      renderComments();
+      setStatus("You have been logged out.");
     });
+
     return;
   }
 
   form.style.display = "none";
-  authBox.innerHTML = `
+  box.innerHTML = `
     <div class="auth-box">
-      <h3>Sign in to comment</h3>
+      <h3>🔐 Sign in to comment</h3>
+
       <form id="login-form">
-        <input id="login-email" type="email" placeholder="Email" autocomplete="email" required />
-        <input id="login-password" type="password" placeholder="Password" autocomplete="current-password" required />
+        <input id="login-email" type="email" placeholder="Email" autocomplete="email" required>
+        <input id="login-password" type="password" placeholder="Password" autocomplete="current-password" required>
         <button type="submit">Log in</button>
       </form>
+
       <hr>
-      <h3>Create an account</h3>
+
+      <h3>📝 Create an account</h3>
       <form id="signup-form">
-        <input id="signup-name" type="text" placeholder="Your name" maxlength="50" required />
-        <input id="signup-email" type="email" placeholder="Email" autocomplete="email" required />
-        <input id="signup-password" type="password" placeholder="Password (6+ characters)" minlength="6" autocomplete="new-password" required />
+        <input id="signup-name" type="text" placeholder="Your name" maxlength="50" required>
+        <input id="signup-email" type="email" placeholder="Email" autocomplete="email" required>
+        <input id="signup-password" type="password" placeholder="Password (6+ characters)" minlength="6" required>
         <button type="submit">Sign up</button>
       </form>
     </div>`;
 
-  document.getElementById("login-form")?.addEventListener("submit", async (event) => {
+  document.getElementById("login-form")?.addEventListener("submit", (event) => {
     event.preventDefault();
-    setStatus("Logging in...");
 
-    const email = document.getElementById("login-email").value.trim();
+    const email = document.getElementById("login-email").value.trim().toLowerCase();
     const password = document.getElementById("login-password").value;
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const user = getUsers().find((item) => item.email === email && item.password === password);
 
-    if (error) {
-      setStatus(error.message, true);
+    if (!user) {
+      setStatus("Invalid email or password.", true);
       return;
     }
 
-    window.location.reload();
+    write(SESSION_KEY, { id: user.id, name: user.name, email: user.email });
+    setStatus("Login successful.");
+    renderAuth();
+    renderComments();
   });
 
-  document.getElementById("signup-form")?.addEventListener("submit", async (event) => {
+  document.getElementById("signup-form")?.addEventListener("submit", (event) => {
     event.preventDefault();
-    setStatus("Creating account...");
 
     const name = document.getElementById("signup-name").value.trim();
-    const email = document.getElementById("signup-email").value.trim();
+    const email = document.getElementById("signup-email").value.trim().toLowerCase();
     const password = document.getElementById("signup-password").value;
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { full_name: name } }
-    });
-
-    if (error) {
-      setStatus(error.message, true);
+    if (password.length < 6) {
+      setStatus("Password must be at least 6 characters.", true);
       return;
     }
 
-    if (data.session) {
-      window.location.reload();
-    } else {
-      setStatus("Account created. Check your email to confirm your account, then log in.");
+    const users = getUsers();
+
+    if (users.some((user) => user.email === email)) {
+      setStatus("An account with this email already exists. Please log in.", true);
+      return;
     }
+
+    const user = { id: uid(), name, email, password };
+    users.push(user);
+    write(USERS_KEY, users);
+    write(SESSION_KEY, { id: user.id, name: user.name, email: user.email });
+
+    setStatus("Account created. You are now signed in.");
+    renderAuth();
+    renderComments();
   });
 }
 
-async function loadComments() {
-  const { data, error } = await supabase
-    .from("comments")
-    .select("id,user_id,name,text,created_at")
-    .order("created_at", { ascending: false });
-
-  if (error) throw error;
-  return data || [];
-}
-
-function renderComments(comments, currentUserId) {
+function renderComments() {
   const list = document.getElementById("comments-list");
   if (!list) return;
+
+  const session = getSession();
+  const comments = getComments().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   if (!comments.length) {
     list.innerHTML = '<p class="no-comments">No comments yet. Be the first to comment!</p>';
     return;
   }
 
-  list.innerHTML = comments.map((comment) => `
-    <article class="comment" data-id="${escapeHtml(comment.id)}">
-      <div class="comment-header">
-        <strong>${escapeHtml(comment.name)}</strong>
-        <span>${escapeHtml(formatDate(comment.created_at))}</span>
-      </div>
-      <p>${escapeHtml(comment.text)}</p>
-      ${comment.user_id === currentUserId ? `
-        <div class="comment-actions">
-          <button type="button" data-action="delete" data-id="${escapeHtml(comment.id)}">Delete</button>
-        </div>` : ""}
-    </article>
-  `).join("");
+  list.innerHTML = comments.map((comment) => {
+    const ownComment = Boolean(session && comment.userId === session.id);
+
+    return `
+      <article class="comment" data-id="${escapeHtml(comment.id)}">
+        <div class="comment-header">
+          <strong>${escapeHtml(comment.name)}</strong>
+          <span>${escapeHtml(formatDate(comment.createdAt))}</span>
+        </div>
+        <p>${escapeHtml(comment.text)}</p>
+        ${ownComment ? `
+          <div class="comment-actions">
+            <button type="button" data-delete-comment="${escapeHtml(comment.id)}">Delete</button>
+          </div>` : ""}
+      </article>`;
+  }).join("");
 }
 
-async function initComments() {
+function initComments() {
   const form = document.getElementById("comment-form");
   const list = document.getElementById("comments-list");
+
   if (!form || !list) return;
 
-  if (!supabase) {
-    renderAuth(null);
-    setStatus("Supabase is not configured.", true);
-    return;
-  }
+  renderAuth();
+  renderComments();
 
-  try {
-    const { data: { session } } = await supabase.auth.getSession();
-    const user = session?.user || null;
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
 
-    renderAuth(user);
-    renderComments(await loadComments(), user?.id || null);
+    const session = getSession();
+    if (!session) {
+      setStatus("Please log in or sign up before posting.", true);
+      renderAuth();
+      return;
+    }
 
-    if (!user) return;
+    const text = document.getElementById("comment-text")?.value.trim() || "";
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
+    if (!text) {
+      setStatus("Please write a comment.", true);
+      return;
+    }
 
-      const name = document.getElementById("comment-name")?.value.trim() || "";
-      const text = document.getElementById("comment-text")?.value.trim() || "";
-
-      if (!name || !text) {
-        setStatus("Please enter your comment.", true);
-        return;
-      }
-
-      setStatus("Posting...");
-
-      const { error } = await supabase.from("comments").insert({
-        user_id: user.id,
-        name,
-        text
-      });
-
-      if (error) {
-        setStatus(error.message, true);
-        return;
-      }
-
-      form.reset();
-      const nameInput = document.getElementById("comment-name");
-      if (nameInput) nameInput.value = user.user_metadata?.full_name || "";
-
-      setStatus("Comment posted.");
-      renderComments(await loadComments(), user.id);
+    const comments = getComments();
+    comments.push({
+      id: uid(),
+      userId: session.id,
+      name: session.name,
+      text,
+      createdAt: new Date().toISOString()
     });
 
-    list.addEventListener("click", async (event) => {
-      const button = event.target.closest('button[data-action="delete"]');
-      if (!button) return;
+    write(COMMENTS_KEY, comments);
+    form.reset();
 
-      const commentId = button.dataset.id;
-      if (!commentId || !confirm("Delete your comment?")) return;
+    const nameInput = document.getElementById("comment-name");
+    if (nameInput) nameInput.value = session.name;
 
-      setStatus("Deleting...");
+    setStatus("Comment posted.");
+    renderComments();
+  });
 
-      const { error } = await supabase
-        .from("comments")
-        .delete()
-        .eq("id", commentId)
-        .eq("user_id", user.id);
+  list.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-delete-comment]");
+    if (!button) return;
 
-      if (error) {
-        setStatus(error.message, true);
-        return;
-      }
+    const session = getSession();
+    const commentId = button.dataset.deleteComment;
 
-      setStatus("Comment deleted.");
-      renderComments(await loadComments(), user.id);
-    });
-  } catch (error) {
-    console.error("Comment system error:", error);
-    setStatus(error.message || "Unable to load comments.", true);
-  }
+    if (!session) {
+      setStatus("Please log in first.", true);
+      return;
+    }
+
+    const comments = getComments();
+    const comment = comments.find((item) => item.id === commentId);
+
+    if (!comment) return;
+
+    /* Owner check: another signed-in user cannot delete this comment. */
+    if (comment.userId !== session.id) {
+      setStatus("You can only delete your own comments.", true);
+      return;
+    }
+
+    if (!confirm("Delete your comment?")) return;
+
+    write(COMMENTS_KEY, comments.filter((item) => item.id !== commentId));
+    setStatus("Comment deleted.");
+    renderComments();
+  });
 }
 
 document.addEventListener("DOMContentLoaded", initComments);
