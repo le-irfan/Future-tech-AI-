@@ -6,6 +6,7 @@
     <title>Modern Web Design Trends - FutureTechX</title>
     <link rel="icon" href="favicon.png" />
     <link rel="stylesheet" href="b.css" />
+    <link rel="stylesheet" href="comments.css" />
   </head>
   <body>
     <header class="navbar"><a class="logo" href="tech.html">Future<span>Tech</span>X</a></header>
@@ -24,6 +25,19 @@
       <p>Modern web design is about more than making a website look good. A successful website should also be fast, accessible, responsive, and easy to use.</p>
       <a href="tech.html#blog" class="back-btn">← Back to Blogs</a>
     </section>
+    <section class="comments-section" id="comments">
+      <h2>Comments</h2>
+      <form id="comment-form">
+        <input id="comment-name" type="text" placeholder="Your name" maxlength="80" required />
+        <textarea id="comment-text" placeholder="Write a comment..." maxlength="1000" required></textarea>
+        <button type="submit">Post Comment</button>
+      </form>
+      <p id="comments-status" aria-live="polite"></p>
+      <div id="comments-list"></div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="comments.js"></script>
     <script>
       if (localStorage.getItem("futureTechTheme") === "light") document.body.classList.add("secret-mode");
     </script>
