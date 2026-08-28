@@ -4,8 +4,11 @@
     <input id="comment-name" name="name" type="text" placeholder="Your name" maxlength="50" required>
     <textarea id="comment-text" name="comment" placeholder="Write a comment..." maxlength="1000" required></textarea>
     <button type="submit">Post comment</button>
+    <p id="comments-status" role="status" aria-live="polite"></p>
   </form>
   <div id="comments-list" aria-live="polite"></div>
 </section>
 <link rel="stylesheet" href="comments.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 <script src="comments.js"></script>
