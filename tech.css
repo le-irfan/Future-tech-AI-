@@ -1138,7 +1138,7 @@ body.secret-mode .footer a {
         flex-direction: column;
     }
 }
-.footer {
+div.footer {
     background: #05080d;
     padding: 20px 10%;
     display: flex;
