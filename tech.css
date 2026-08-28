@@ -552,7 +552,49 @@ body.secret-mode .cardi:hover {
     box-shadow: 0 15px 40px rgba(255, 0, 0, .5);
     border: 1px solid var(--cyan);
 }
+body.secret-mode .contact {
+    background: var(--bg);
+    color: var(--text);
+}
 
+body.secret-mode .contact-header span {
+    color: var(--cyan);
+}
+
+body.secret-mode .contact-header h2 {
+    color: var(--text);
+}
+
+body.secret-mode .contact-header p {
+    color: var(--muted);
+}
+
+body.secret-mode .contact-card {
+    background: var(--card);
+}
+
+body.secret-mode .contact-icon {
+    background: var(--cyan);
+    color: #fff;
+}
+
+body.secret-mode .contact-card h3 {
+    color: var(--text);
+}
+
+body.secret-mode .contact-card p {
+    color: var(--muted);
+}
+
+body.secret-mode .contact-socials a {
+    color: var(--text);
+    background: var(--card);
+}
+
+body.secret-mode .contact-socials a:hover {
+    background: var(--cyan);
+    color: #fff;
+}
 .impact {
     padding: 80px 8%;
     background: var(--bg);
@@ -909,7 +951,6 @@ body.secret-mode .cardi:hover {
     color: var(--blue)
 }
 
-/* BLOG PHONE LAYOUT */
 @media (max-width: 600px) {
     #blog {
         width: 100%;
