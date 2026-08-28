@@ -1,0 +1,11 @@
+<section class="comments-section" aria-labelledby="comments-title">
+  <h2 id="comments-title">Comments</h2>
+  <form id="comment-form">
+    <input id="comment-name" name="name" type="text" placeholder="Your name" maxlength="50" required>
+    <textarea id="comment-text" name="comment" placeholder="Write a comment..." maxlength="1000" required></textarea>
+    <button type="submit">Post comment</button>
+  </form>
+  <div id="comments-list" aria-live="polite"></div>
+</section>
+<link rel="stylesheet" href="comments.css">
+<script src="comments.js"></script>
