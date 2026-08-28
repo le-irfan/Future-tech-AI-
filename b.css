@@ -365,3 +365,27 @@ body.secret-mode .comment p {
     width: 100%;
   }
 }
+.back-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 12px 22px;
+  background: var(--bg);
+  color: var(--text);
+  text-decoration: none;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  color: var(--cyan);
+}
+body.secret-mode .back-btn {
+  background: #ffffff;
+  color: var(--text);
+  border: 1px solid var(--cyan);
+}
+
+body.secret-mode .back-btn:hover {
+  background: var(--cyan);
+  color: white;
+}
