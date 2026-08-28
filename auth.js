@@ -1,20 +1,3 @@
-const USERS_KEY = "futuretechx_users";
-const SESSION_KEY = "futuretechx_session";
-
-function users() {
-  return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
-}
-
-function saveUsers(list) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(list));
-}
-
-function show(text) {
-  const box = document.getElementById("auth-message");
-  if (box) box.textContent = text;
-}
-
-// LOGIN
 const loginForm = document.getElementById("login-form");
 
 if (loginForm) {
@@ -29,7 +12,7 @@ if (loginForm) {
     });
 
     if (!user) {
-      show("❌ Wrong email or password.");
+      show(" Wrong email or password.");
       return;
     }
 
@@ -39,14 +22,14 @@ if (loginForm) {
       email: user.email
     }));
 
-    show("✅ Login successful!");
+    show(" Login successful!");
     setTimeout(function () {
       location.href = "blog-ai.html";
     }, 500);
   });
 }
 
-// SIGN UP
+
 const signupForm = document.getElementById("signup-form");
 
 if (signupForm) {
@@ -59,24 +42,24 @@ if (signupForm) {
     const confirm = document.getElementById("signup-confirm").value;
 
     if (!name || !email || !password || !confirm) {
-      show("❌ Please fill in all fields.");
+      show(" Please fill in all fields.");
       return;
     }
 
     if (password.length < 6) {
-      show("❌ Password must be at least 6 characters.");
+      show("Password must be at least 6 characters.");
       return;
     }
 
     if (password !== confirm) {
-      show("❌ Passwords do not match.");
+      show(" Passwords do not match.");
       return;
     }
 
     const list = users();
 
     if (list.some(function (u) { return u.email === email; })) {
-      show("❌ Email already exists. Please log in.");
+      show(" Email already exists. Please log in.");
       return;
     }
 
@@ -96,7 +79,7 @@ if (signupForm) {
       email: user.email
     }));
 
-    show("✅ Account created!");
+    show(" Account created!");
     setTimeout(function () {
       location.href = "blog-ai.html";
     }, 500);
