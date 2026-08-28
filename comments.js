@@ -7,18 +7,6 @@ function escapeHtml(value) {
   return div.innerHTML;
 }
 
-function setStatus(message, isError = false) {
-  const status = document.getElementById("comments-status");
-  if (!status) return;
-  status.textContent = message;
-  status.dataset.error = isError ? "true" : "false";
-}
-
-function formatDate(value) {
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? "Just now" : date.toLocaleString();
-}
-
 function getComments() {
   try {
     const saved = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "[]");
@@ -41,36 +29,40 @@ function getUserId() {
   return id;
 }
 
+function formatDate(value) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "" : date.toLocaleString();
+}
+
 function renderComments(comments, userId) {
   const list = document.getElementById("comments-list");
   if (!list) return;
 
-  list.innerHTML = comments.length
-    ? comments.map((comment) => `
-      <article class="comment" data-id="${escapeHtml(comment.id)}">
-        <div class="comment-header">
-          <strong>${escapeHtml(comment.name)}</strong>
-          <span>${escapeHtml(formatDate(comment.updated_at || comment.created_at))}</span>
-        </div>
-        <p>${escapeHtml(comment.text)}</p>
-        ${comment.user_id === userId ? `
-          <div class="comment-actions">
-            <button type="button" data-action="edit" data-id="${escapeHtml(comment.id)}">Edit</button>
-            <button type="button" data-action="delete" data-id="${escapeHtml(comment.id)}">Delete</button>
-          </div>` : ""}
-      </article>
-    `).join("")
-    : '<p class="no-comments">No comments yet. Be the first to comment!</p>';
+  list.innerHTML = comments.map((comment) => `
+    <article class="comment" data-id="${escapeHtml(comment.id)}">
+      <div class="comment-header">
+        <strong>${escapeHtml(comment.name)}</strong>
+        <span>${escapeHtml(formatDate(comment.updated_at || comment.created_at))}</span>
+      </div>
+      <p>${escapeHtml(comment.text)}</p>
+      ${comment.user_id === userId ? `
+        <div class="comment-actions">
+          <button type="button" data-action="edit" data-id="${escapeHtml(comment.id)}">Edit</button>
+          <button type="button" data-action="delete" data-id="${escapeHtml(comment.id)}">Delete</button>
+        </div>` : ""}
+    </article>
+  `).join("");
 }
 
 function initComments() {
   const form = document.getElementById("comment-form");
   const list = document.getElementById("comments-list");
+  const status = document.getElementById("comments-status");
   if (!form || !list) return;
 
   const userId = getUserId();
   renderComments(getComments(), userId);
-  setStatus("Comments are saved on this device.");
+  if (status) status.textContent = "";
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -80,10 +72,7 @@ function initComments() {
     const name = nameInput?.value.trim() || "";
     const text = textInput?.value.trim() || "";
 
-    if (!name || !text) {
-      setStatus("Please enter your name and comment.", true);
-      return;
-    }
+    if (!name || !text) return;
 
     const now = new Date().toISOString();
     const comments = getComments();
@@ -99,7 +88,6 @@ function initComments() {
     saveComments(comments);
     form.reset();
     renderComments(comments, userId);
-    setStatus("Comment posted.");
   });
 
   list.addEventListener("click", (event) => {
@@ -116,25 +104,18 @@ function initComments() {
       comments = comments.filter((item) => String(item.id) !== String(id));
       saveComments(comments);
       renderComments(comments, userId);
-      setStatus("Comment deleted.");
-      return;
     }
 
     if (button.dataset.action === "edit") {
       const updated = prompt("Edit your comment:", comment.text);
       if (updated === null) return;
-
       const text = updated.trim();
-      if (!text) {
-        setStatus("Comment cannot be empty.", true);
-        return;
-      }
+      if (!text) return;
 
       comment.text = text;
       comment.updated_at = new Date().toISOString();
       saveComments(comments);
       renderComments(comments, userId);
-      setStatus("Comment updated.");
     }
   });
 }
