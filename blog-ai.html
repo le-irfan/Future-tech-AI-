@@ -1,45 +1,53 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>How AI Is Changing the World - FutureTechX</title>
-    <link rel="icon" href="favicon.png" />
-    <link rel="stylesheet" href="b.css" />
-    <link rel="stylesheet" href="comments.css" />
-  </head>
-  <body>
-    <header class="navbar"><a class="logo" href="tech.html">Future<span>Tech</span>X</a></header>
-    <section class="blog-post">
-      <span class="category">Technology</span>
-      <h2>How AI Is Changing the World</h2>
-      <p class="date">Haron Endale · August 21, 2026</p>
-      <p>Artificial intelligence is changing the way people interact with technology. From websites and applications to education and business, AI is becoming an important part of modern digital experiences.</p>
-      <h3>Artificial Intelligence</h3>
-      <p>AI allows computers to perform tasks that normally require human intelligence. These tasks can include understanding information, recognizing patterns, generating content, and helping people solve problems.</p>
-      <h3>AI and Web Development</h3>
-      <p>AI is also changing web development. Developers can use AI-powered tools to generate ideas, understand code, find errors, and improve websites. This can make the development process faster and more efficient.</p>
-      <h3>The Future of AI</h3>
-      <p>As artificial intelligence continues to develop, it may become even more useful in education, business, science, design, and software development.</p>
-      <h3>Conclusion</h3>
-      <p>AI is becoming one of the most important technologies of our time. When developed and used responsibly, it can create new opportunities and help people solve difficult problems.</p>
-      <a href="tech.html#blog" class="back-btn">← Back to Blogs</a>
-    </section>
-    <section class="comments-section" id="comments">
-      <h2>Comments</h2>
-      <form id="comment-form">
-        <input id="comment-name" type="text" placeholder="Your name" maxlength="80" required />
-        <textarea id="comment-text" placeholder="Write a comment..." maxlength="1000" required></textarea>
-        <button type="submit">Post Comment</button>
-      </form>
-      <p id="comments-status" aria-live="polite"></p>
-      <div id="comments-list"></div>
-    </section>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-config.js"></script>
-    <script src="comments.js"></script>
-    <script>
-      if (localStorage.getItem("futureTechTheme") === "light") document.body.classList.add("secret-mode");
-    </script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How AI Is Changing the World - FutureTechX</title>
+  <link rel="icon" href="favicon.png" />
+  <link rel="stylesheet" href="b.css" />
+  <link rel="stylesheet" href="comments.css" />
+</head>
+<body>
+  <header class="navbar">
+    <a class="logo" href="tech.html">Future<span>Tech</span>X</a>
+    <nav class="blog-actions" aria-label="Account navigation">
+      <a class="back-btn" href="create-post.html">📝 Create Blog Post</a>
+      <a class="back-btn" href="login.html">🔐 Login</a>
+      <a class="back-btn" href="signup.html">✨ Sign Up</a>
+    </nav>
+  </header>
+
+  <section class="blog-post">
+    <span class="category">Technology</span>
+    <h2>How AI Is Changing the World</h2>
+    <p class="date">Haron Endale · August 21, 2026</p>
+    <p>Artificial intelligence is changing the way people interact with technology. From websites and applications to education and business, AI is becoming an important part of modern digital experiences.</p>
+    <h3>Artificial Intelligence</h3>
+    <p>AI allows computers to perform tasks that normally require human intelligence. These tasks can include understanding information, recognizing patterns, generating content, and helping people solve problems.</p>
+    <h3>AI and Web Development</h3>
+    <p>AI is also changing web development. Developers can use AI-powered tools to generate ideas, understand code, find errors, and improve websites. This can make the development process faster and more efficient.</p>
+    <h3>The Future of AI</h3>
+    <p>As artificial intelligence continues to develop, it may become even more useful in education, business, science, design, and software development.</p>
+    <h3>Conclusion</h3>
+    <p>AI is becoming one of the most important technologies of our time. When developed and used responsibly, it can create new opportunities and help people solve difficult problems.</p>
+    <a href="tech.html#blog" class="back-btn">← Back to Blogs</a>
+  </section>
+
+  <section class="comments-section" id="comments">
+    <h2>Comments</h2>
+    <form id="comment-form">
+      <input id="comment-name" type="text" placeholder="Your name" maxlength="80" required />
+      <textarea id="comment-text" placeholder="Write a comment..." maxlength="1000" required></textarea>
+      <button type="submit">Post Comment</button>
+    </form>
+    <p id="comments-status" aria-live="polite"></p>
+    <div id="comments-list"></div>
+  </section>
+
+  <script src="comments.js"></script>
+  <script>
+    if (localStorage.getItem("futureTechTheme") === "light") document.body.classList.add("secret-mode");
+  </script>
+</body>
 </html>
