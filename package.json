@@ -2,10 +2,9 @@
   "name": "futuretechx",
   "version": "1.0.0",
   "private": true,
-  "description": "FutureTechX website",
-  "main": "server-fixed.js",
+  "description": "FutureTechX static website",
   "scripts": {
-    "start": "node server-fixed.js"
+    "start": "npx --yes serve . -l $PORT"
   },
   "engines": {
     "node": ">=18"
