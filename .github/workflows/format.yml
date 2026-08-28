@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Add shared favicon, logo and theme initialization
+      - name: Add shared favicon, logo, theme and blog links
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -32,6 +32,11 @@ jobs:
 
               # Make every nav logo match tech.html exactly.
               text = re.sub(r'Future\s*<span>Tech</span>\s*X', 'Future<span>Tech</span>X', text, flags=re.I)
+
+              # Give every homepage blog card its own article page.
+              text = text.replace('b.html#ai', 'blog-ai.html')
+              text = text.replace('b.html#design', 'blog-design.html')
+              text = text.replace('b.html#development', 'blog-development.html')
 
               # Keep the dark theme as the default on every page, while
               # respecting the existing double-click light-mode preference.
@@ -54,6 +59,6 @@ jobs:
             echo "No formatting changes needed."
             exit 0
           fi
-          git commit -m "Restore original favicon"
+          git commit -m "Update blog links and formatting"
           git pull --rebase origin main
           git push origin HEAD:main
