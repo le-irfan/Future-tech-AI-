@@ -4,7 +4,10 @@
   "private": true,
   "description": "FutureTechX static website",
   "scripts": {
-    "start": "npx --yes serve . -l $PORT"
+    "start": "serve -s . -l $PORT"
+  },
+  "dependencies": {
+    "serve": "^14.2.4"
   },
   "engines": {
     "node": ">=18"
