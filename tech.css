@@ -1147,11 +1147,13 @@ body.secret-mode .footer a {
 .footer p {
     color: #aaa;
     margin: 0;
+    text-align: center;
 }
 
 .footer a {
     color: #00e5ff;
     text-decoration: none;
+    text-align: end;
 }
 
 .footer a:hover {
