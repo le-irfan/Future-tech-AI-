@@ -1,16 +1,24 @@
-const { createClient } = window.supabase;
+const { createClient } = window.supabase || {};
 
 const SUPABASE_URL = window.SUPABASE_URL;
 const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
-const supabaseClient =
-  SUPABASE_URL && SUPABASE_ANON_KEY &&
-  !SUPABASE_URL.includes("YOUR_") && !SUPABASE_ANON_KEY.includes("YOUR_")
-    ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-    : null;
+const hasSupabaseConfig =
+  typeof createClient === "function" &&
+  typeof SUPABASE_URL === "string" &&
+  typeof SUPABASE_ANON_KEY === "string" &&
+  SUPABASE_URL.startsWith("https://") &&
+  !SUPABASE_URL.includes("YOUR_") &&
+  !SUPABASE_ANON_KEY.includes("YOUR_");
+
+const supabaseClient = hasSupabaseConfig
+  ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
+
+const LOCAL_STORAGE_KEY = "future-tech-ai-comments";
 
 function escapeHtml(value) {
   const div = document.createElement("div");
-  div.textContent = value;
+  div.textContent = String(value ?? "");
   return div.innerHTML;
 }
 
@@ -22,11 +30,34 @@ function setStatus(message, isError = false) {
 }
 
 function formatDate(value) {
-  return new Date(value).toLocaleString();
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "Just now" : date.toLocaleString();
+}
+
+function getLocalComments() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "[]");
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveLocalComments(comments) {
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(comments));
+}
+
+function getLocalUserId() {
+  let id = localStorage.getItem("future-tech-ai-user-id");
+  if (!id) {
+    id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
+    localStorage.setItem("future-tech-ai-user-id", id);
+  }
+  return id;
 }
 
 async function ensureAnonymousUser() {
-  if (!supabaseClient) throw new Error("Supabase is not configured yet.");
+  if (!supabaseClient) return { id: getLocalUserId() };
 
   const { data: { session } } = await supabaseClient.auth.getSession();
   if (session?.user) return session.user;
@@ -37,7 +68,7 @@ async function ensureAnonymousUser() {
 }
 
 async function loadComments() {
-  if (!supabaseClient) return [];
+  if (!supabaseClient) return getLocalComments();
 
   const { data, error } = await supabaseClient
     .from("comments")
@@ -54,7 +85,7 @@ function renderComments(comments, currentUserId) {
 
   list.innerHTML = comments.length
     ? comments.map((comment) => `
-        <article class="comment" data-id="${comment.id}">
+        <article class="comment" data-id="${escapeHtml(comment.id)}">
           <div class="comment-header">
             <strong>${escapeHtml(comment.name)}</strong>
             <span>${escapeHtml(formatDate(comment.updated_at || comment.created_at))}</span>
@@ -62,8 +93,8 @@ function renderComments(comments, currentUserId) {
           <p>${escapeHtml(comment.text)}</p>
           ${comment.user_id === currentUserId ? `
             <div class="comment-actions">
-              <button type="button" data-action="edit" data-id="${comment.id}">Edit</button>
-              <button type="button" data-action="delete" data-id="${comment.id}">Delete</button>
+              <button type="button" data-action="edit" data-id="${escapeHtml(comment.id)}">Edit</button>
+              <button type="button" data-action="delete" data-id="${escapeHtml(comment.id)}">Delete</button>
             </div>` : ""}
         </article>
       `).join("")
@@ -75,88 +106,142 @@ async function refreshComments(userId) {
   renderComments(comments, userId);
 }
 
+async function addComment(user, name, text) {
+  if (supabaseClient) {
+    const { error } = await supabaseClient.from("comments").insert({
+      user_id: user.id,
+      name,
+      text,
+    });
+    if (error) throw error;
+    return;
+  }
+
+  const comments = getLocalComments();
+  comments.unshift({
+    id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`,
+    user_id: user.id,
+    name,
+    text,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  });
+  saveLocalComments(comments);
+}
+
+async function editComment(user, id, text) {
+  if (supabaseClient) {
+    const { error } = await supabaseClient
+      .from("comments")
+      .update({ text })
+      .eq("id", id)
+      .eq("user_id", user.id);
+    if (error) throw error;
+    return;
+  }
+
+  const comments = getLocalComments();
+  const comment = comments.find((item) => String(item.id) === String(id) && item.user_id === user.id);
+  if (!comment) throw new Error("Comment not found.");
+  comment.text = text;
+  comment.updated_at = new Date().toISOString();
+  saveLocalComments(comments);
+}
+
+async function deleteComment(user, id) {
+  if (supabaseClient) {
+    const { error } = await supabaseClient
+      .from("comments")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", user.id);
+    if (error) throw error;
+    return;
+  }
+
+  const comments = getLocalComments().filter(
+    (item) => !(String(item.id) === String(id) && item.user_id === user.id)
+  );
+  saveLocalComments(comments);
+}
+
 async function initComments() {
   const form = document.getElementById("comment-form");
   const list = document.getElementById("comments-list");
   if (!form || !list) return;
 
-  if (!supabaseClient) {
-    setStatus("Database is not configured. Add your Supabase URL and anon key in supabase-config.js.", true);
-    return;
-  }
-
   try {
     const user = await ensureAnonymousUser();
     await refreshComments(user.id);
 
+    if (!supabaseClient) {
+      setStatus("Comments are working in this browser. Connect Supabase for shared comments.");
+    }
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      const name = document.getElementById("comment-name").value.trim();
-      const text = document.getElementById("comment-text").value.trim();
-      if (!name || !text) return;
+      const nameInput = document.getElementById("comment-name");
+      const textInput = document.getElementById("comment-text");
+      const name = nameInput?.value.trim() || "";
+      const text = textInput?.value.trim() || "";
 
-      setStatus("Posting...");
-      const { error } = await supabaseClient.from("comments").insert({
-        user_id: user.id,
-        name,
-        text,
-      });
-
-      if (error) {
-        setStatus(error.message, true);
+      if (!name || !text) {
+        setStatus("Please enter your name and comment.", true);
         return;
       }
 
-      form.reset();
-      setStatus("Comment posted.");
-      await refreshComments(user.id);
+      setStatus("Posting...");
+      try {
+        await addComment(user, name, text);
+        form.reset();
+        setStatus("Comment posted.");
+        await refreshComments(user.id);
+      } catch (error) {
+        console.error("Failed to post comment:", error);
+        setStatus(error.message || "Unable to post comment.", true);
+      }
     });
 
     list.addEventListener("click", async (event) => {
       const button = event.target.closest("button[data-action]");
       if (!button) return;
 
-      const id = Number(button.dataset.id);
-      if (!Number.isFinite(id)) return;
+      const id = button.dataset.id;
+      if (!id) return;
 
-      if (button.dataset.action === "delete") {
-        if (!confirm("Delete this comment?")) return;
-        const { error } = await supabaseClient
-          .from("comments")
-          .delete()
-          .eq("id", id)
-          .eq("user_id", user.id);
-        if (error) {
-          setStatus(error.message, true);
-          return;
+      try {
+        if (button.dataset.action === "delete") {
+          if (!confirm("Delete this comment?")) return;
+          await deleteComment(user, id);
+          setStatus("Comment deleted.");
         }
-      }
 
-      if (button.dataset.action === "edit") {
-        const article = button.closest("article");
-        const currentText = article?.querySelector("p")?.textContent || "";
-        const updated = prompt("Edit your comment:", currentText);
-        if (updated === null) return;
-        const text = updated.trim();
-        if (!text) return;
+        if (button.dataset.action === "edit") {
+          const article = button.closest("article");
+          const currentText = article?.querySelector("p")?.textContent || "";
+          const updated = prompt("Edit your comment:", currentText);
+          if (updated === null) return;
 
-        const { error } = await supabaseClient
-          .from("comments")
-          .update({ text })
-          .eq("id", id)
-          .eq("user_id", user.id);
-        if (error) {
-          setStatus(error.message, true);
-          return;
+          const text = updated.trim();
+          if (!text) {
+            setStatus("Comment cannot be empty.", true);
+            return;
+          }
+
+          await editComment(user, id, text);
+          setStatus("Comment updated.");
         }
-      }
 
-      await refreshComments(user.id);
+        await refreshComments(user.id);
+      } catch (error) {
+        console.error("Comment action failed:", error);
+        setStatus(error.message || "Unable to update the comment.", true);
+      }
     });
   } catch (error) {
     console.error("Comments initialization failed:", error);
-    setStatus(error.message || "Unable to connect to the comments database.", true);
+    setStatus(error.message || "Unable to initialize comments.", true);
   }
 }
 
