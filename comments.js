@@ -1,4 +1,3 @@
-const LOCAL_STORAGE_KEY = "future-tech-ai-comments";
 const LOCAL_USER_KEY = "future-tech-ai-user-id";
 
 function escapeHtml(value) {
@@ -7,9 +6,14 @@ function escapeHtml(value) {
   return div.innerHTML;
 }
 
+function getPostKey() {
+  const path = window.location.pathname.split("/").pop() || "home";
+  return `future-tech-ai-comments:${path.toLowerCase()}`;
+}
+
 function getComments() {
   try {
-    const saved = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "[]");
+    const saved = JSON.parse(localStorage.getItem(getPostKey()) || "[]");
     return Array.isArray(saved) ? saved : [];
   } catch {
     return [];
@@ -17,7 +21,7 @@ function getComments() {
 }
 
 function saveComments(comments) {
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(comments));
+  localStorage.setItem(getPostKey(), JSON.stringify(comments));
 }
 
 function getUserId() {
