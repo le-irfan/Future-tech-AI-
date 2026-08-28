@@ -595,6 +595,17 @@ body.secret-mode .contact-socials a:hover {
     background: var(--cyan);
     color: #fff;
 }
+body.secret-mode .footer {
+    background: var(--bg);
+}
+
+body.secret-mode .footer p {
+    color: var(--muted);
+}
+
+body.secret-mode .footer a {
+    color: var(--cyan);
+}
 .impact {
     padding: 80px 8%;
     background: var(--bg);
@@ -1124,4 +1135,25 @@ body.secret-mode .contact-socials a:hover {
     .contact-content {
         flex-direction: column;
     }
+}
+.footer {
+    background: #05080d;
+    padding: 20px 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer p {
+    color: #aaa;
+    margin: 0;
+}
+
+.footer a {
+    color: #00e5ff;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: white;
 }
