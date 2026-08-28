@@ -1,62 +1,104 @@
 const USERS_KEY = "futuretechx_users";
 const SESSION_KEY = "futuretechx_session";
 
-function getUsers() {
-  try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; } catch { return []; }
+function users() {
+  return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
 }
 
-function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
-function getSession() {
-  try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch { return null; }
-}
-function setSession(user) { localStorage.setItem(SESSION_KEY, JSON.stringify(user)); }
-function uid() { return crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2); }
-
-function showMessage(message, error = false) {
-  const el = document.getElementById("auth-message");
-  if (!el) return;
-  el.textContent = message;
-  el.className = error ? "auth-message error" : "auth-message success";
+function saveUsers(list) {
+  localStorage.setItem(USERS_KEY, JSON.stringify(list));
 }
 
-function setupLogin() {
-  const form = document.getElementById("login-form");
-  if (!form) return;
-  if (getSession()) {
-    window.location.href = "blog-ai.html";
-    return;
-  }
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
+function show(text) {
+  const box = document.getElementById("auth-message");
+  if (box) box.textContent = text;
+}
+
+// LOGIN
+const loginForm = document.getElementById("login-form");
+
+if (loginForm) {
+  loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
     const email = document.getElementById("login-email").value.trim().toLowerCase();
     const password = document.getElementById("login-password").value;
-    const user = getUsers().find(u => u.email === email && u.password === password);
-    if (!user) { showMessage("Invalid email or password.", true); return; }
-    setSession({ id: user.id, name: user.name, email: user.email });
-    showMessage("Login successful. Redirecting...");
-    setTimeout(() => window.location.href = "blog-ai.html", 500);
+
+    const user = users().find(function (u) {
+      return u.email === email && u.password === password;
+    });
+
+    if (!user) {
+      show("❌ Wrong email or password.");
+      return;
+    }
+
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+      id: user.id,
+      name: user.name,
+      email: user.email
+    }));
+
+    show("✅ Login successful!");
+    setTimeout(function () {
+      location.href = "blog-ai.html";
+    }, 500);
   });
 }
 
-function setupSignup() {
-  const form = document.getElementById("signup-form");
-  if (!form) return;
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
+// SIGN UP
+const signupForm = document.getElementById("signup-form");
+
+if (signupForm) {
+  signupForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
     const name = document.getElementById("signup-name").value.trim();
     const email = document.getElementById("signup-email").value.trim().toLowerCase();
     const password = document.getElementById("signup-password").value;
     const confirm = document.getElementById("signup-confirm").value;
-    if (name.length < 2) return showMessage("Please enter your name.", true);
-    if (password.length < 6) return showMessage("Password must be at least 6 characters.", true);
-    if (password !== confirm) return showMessage("Passwords do not match.", true);
-    const users = getUsers();
-    if (users.some(u => u.email === email)) return showMessage("This email is already registered. Please log in.", true);
-    const user = { id: uid(), name, email, password };
-    users.push(user); saveUsers(users); setSession({ id: user.id, name, email });
-    showMessage("Account created. Redirecting...");
-    setTimeout(() => window.location.href = "blog-ai.html", 500);
+
+    if (!name || !email || !password || !confirm) {
+      show("❌ Please fill in all fields.");
+      return;
+    }
+
+    if (password.length < 6) {
+      show("❌ Password must be at least 6 characters.");
+      return;
+    }
+
+    if (password !== confirm) {
+      show("❌ Passwords do not match.");
+      return;
+    }
+
+    const list = users();
+
+    if (list.some(function (u) { return u.email === email; })) {
+      show("❌ Email already exists. Please log in.");
+      return;
+    }
+
+    const user = {
+      id: Date.now().toString(),
+      name: name,
+      email: email,
+      password: password
+    };
+
+    list.push(user);
+    saveUsers(list);
+
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+      id: user.id,
+      name: user.name,
+      email: user.email
+    }));
+
+    show("✅ Account created!");
+    setTimeout(function () {
+      location.href = "blog-ai.html";
+    }, 500);
   });
 }
-
-document.addEventListener("DOMContentLoaded", () => { setupLogin(); setupSignup(); });
