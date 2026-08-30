@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In - FutureTechX</title>
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-card">
+      <a class="brand" href="tech.html">Future<span>Tech</span>X</a>
+      <p class="subtitle">Log in to join the FutureTechX conversation.</p>
+      <form class="auth-form" action="/api/auth/login" method="post">
+        <label>Username<input name="username" autocomplete="username" minlength="3" maxlength="24" required></label>
+        <label>Password<input name="password" type="password" autocomplete="current-password" minlength="8" required></label>
+        <button class="auth-btn" type="submit">Log In</button>
+        <div class="auth-status" aria-live="polite"></div>
+      </form>
+      <p class="auth-switch">Don't have an account? <a id="signupLink" href="signup.html">Sign up</a></p>
+      <a class="auth-back" href="tech.html#blog">← Back to FutureTechX</a>
+    </section>
+  </main>
+  <script>
+    const next = new URLSearchParams(location.search).get('next');
+    if (next && next.startsWith('/') && !next.startsWith('//')) document.getElementById('signupLink').href = `signup.html?next=${encodeURIComponent(next)}`;
+  </script>
+  <script src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+name: Format code
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add shared favicon, logo, theme and blog links
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          for path in Path('.').glob('*.html'):
+              text = path.read_text(encoding='utf-8')
+
+              # Restore the original FutureTechX PNG favicon on every page.
+              favicon = '<link rel="icon" href="favicon.png" />'
+              text = re.sub(r'\s*<link[^>]*rel=["\']icon["\'][^>]*>\s*', '\n', text, flags=re.I)
+              text = re.sub(r'(</title>)', r'\1\n    ' + favicon, text, count=1, flags=re.I)
+
+              # Make every nav logo match tech.html exactly.
+              text = re.sub(r'Future\s*<span>Tech</span>\s*X', 'Future<span>Tech</span>X', text, flags=re.I)
+
+              # Give every homepage blog card its own article page.
+              text = text.replace('b.html#ai', 'blog-ai.html')
+              text = text.replace('b.html#design', 'blog-design.html')
+              text = text.replace('b.html#development', 'blog-development.html')
+
+              # Keep the dark theme as the default on every page, while
+              # respecting the existing double-click light-mode preference.
+              theme = '''\n    <script>\n      if (localStorage.getItem("futureTechTheme") === "light") {\n        document.body.classList.add("secret-mode");\n      } else {\n        document.body.classList.remove("secret-mode");\n      }\n    </script>\n'''
+              text = re.sub(r'\s*<script>\s*if \(localStorage\.getItem\("futureTechTheme"\) === "light"\).*?</script>\s*', '\n', text, flags=re.I | re.S)
+              text = re.sub(r'(</body>)', theme + r'\1', text, count=1, flags=re.I)
+
+              path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Format HTML, CSS, JS and JSON
+        run: npx --yes prettier@3.6.2 --write "**/*.{html,css,js,json}" --ignore-path .gitignore
+
+      - name: Commit formatting changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No formatting changes needed."
+            exit 0
+          fi
+          git commit -m "Update blog links and formatting"
+          git pull --rebase origin main
+          git push origin HEAD:main

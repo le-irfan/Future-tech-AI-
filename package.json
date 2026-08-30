@@ -1,0 +1,16 @@
+{
+  "name": "futuretechx-web-database",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FutureTechX web server and comments database API",
+  "main": "server-fixed.js",
+  "scripts": {
+    "start": "node server-fixed.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
+  }
+}
