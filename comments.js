@@ -1,7 +1,3 @@
-/* FutureTechX local comments: authentication forms live only on login.html/signup.html. */
-const SESSION_KEY = "futuretechx_session";
-const COMMENTS_KEY = "futuretechx_comments";
-
 function read(key, fallback) {
   try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
 }
@@ -25,7 +21,7 @@ function renderAuthPrompt() {
   const session = getSession();
   if (!session) {
     form.style.display = "none";
-    panel.innerHTML = '<span>🔐 Log in or create an account to comment.</span><a href="login.html">Login</a><a href="signup.html">Sign Up</a>';
+    panel.innerHTML = '<span> Log in or create an account to comment.</span><a href="login.html">Login</a><a href="signup.html">Sign Up</a>';
     return;
   }
   panel.innerHTML = '<span>Signed in as <strong>' + escapeHtml(session.name) + '</strong></span><button class="comment-auth-button" id="comment-logout" type="button">Log out</button>';
