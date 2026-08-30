@@ -43,7 +43,6 @@ function renderComments() {
   if (!comments.length) { list.innerHTML = '<p class="no-comments">No comments yet. Be the first to comment!</p>'; return; }
   list.innerHTML = comments.map(comment => {
     const own = session && comment.userId === session.id;
-    return '<article class="comment"><div class="comment-header"><strong>' + escapeHtml(comment.name) + '</strong><span>' + escapeHtml(formatDate(comment.createdAt)) + '</span></div><p>' + escapeHtml(comment.text) + '</p>' + (own ? '<div class="comment-actions"><button type="button" data-delete-comment="' + escapeHtml(comment.id) + '">Delete</button></div>' : '') + '</article>';
   }).join("");
 }
 
