@@ -6,64 +6,26 @@
   <title>Sign Up - FutureTechX</title>
   <link rel="stylesheet" href="auth.css">
 </head>
-<body class="auth-page">
-  <main class="auth-card">
-    <a class="back-home" href="blog-ai.html">← Back to Blog</a>
-
-    <h1> Sign Up</h1>
-    <p class="subtitle">Create an account to create posts and join the discussion.</p>
-
-    <form id="signup-form" class="auth-form">
-      <label for="signup-name">Name</label>
-      <input
-        id="signup-name"
-        type="text"
-        maxlength="50"
-        autocomplete="name"
-        placeholder="Enter your name"
-        required
-      >
-
-      <label for="signup-email">Email</label>
-      <input
-        id="signup-email"
-        type="email"
-        autocomplete="email"
-        placeholder="Enter your email"
-        required
-      >
-
-      <label for="signup-password">Password</label>
-      <input
-        id="signup-password"
-        type="password"
-        minlength="6"
-        autocomplete="new-password"
-        placeholder="Create a password"
-        required
-      >
-
-      <label for="signup-confirm">Confirm Password</label>
-      <input
-        id="signup-confirm"
-        type="password"
-        minlength="6"
-        autocomplete="new-password"
-        placeholder="Confirm your password"
-        required
-      >
-
-      <button type="submit"> Create Account</button>
-    </form>
-
-    <p id="auth-message" class="auth-message" aria-live="polite"></p>
-
-    <div class="auth-links">
-      <a href="login.html">🔐 Already have an account? Log in</a>
-      <a href="blog-ai.html">← Back to Blog</a>
-    </div>
+<body>
+  <main class="auth-shell">
+    <section class="auth-card">
+      <a class="brand" href="tech.html">Future<span>Tech</span>X</a>
+      <p class="subtitle">Create an account and start commenting.</p>
+      <form class="auth-form" action="/api/auth/signup" method="post">
+        <label>Username<input name="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" required></label>
+        <label>Password<input name="password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></label>
+        <label>Confirm password<input name="confirmPassword" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></label>
+        <button class="auth-btn" type="submit">Create Account</button>
+        <div class="auth-status" aria-live="polite"></div>
+      </form>
+      <p class="auth-switch">Already have an account? <a id="loginLink" href="login.html">Log in</a></p>
+      <a class="auth-back" href="tech.html#blog">← Back to FutureTechX</a>
+    </section>
   </main>
-
+  <script>
+    const next = new URLSearchParams(location.search).get('next');
+    if (next && next.startsWith('/') && !next.startsWith('//')) document.getElementById('loginLink').href = `login.html?next=${encodeURIComponent(next)}`;
+  </script>
   <script src="auth.js"></script>
 </body>
 </html>

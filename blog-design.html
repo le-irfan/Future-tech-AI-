@@ -6,47 +6,73 @@
     <title>Modern Web Design Trends - FutureTechX</title>
     <link rel="icon" href="favicon.png" />
     <link rel="stylesheet" href="b.css" />
-    <link rel="stylesheet" href="comments.css" />
   </head>
   <body>
-     <header class="navbar">
-    <a class="logo" href="tech.html">Future<span>Tech</span>X</a>
-    <nav class="blog-actions" aria-label="Blog actions">
-      <a class="back-btn" href="create-post.html">Create Blog Post</a>
-      <a class="back-btn" href="login.html"> Login</a>
-      <a class="back-btn" href="signup.html"> Sign Up</a>
-    </nav>
-  </header>
-  <section class="blog-post">
+    <header class="navbar"><a class="logo" href="tech.html">Future<span>Tech</span>X</a></header>
+    <section class="blog-post">
       <span class="category">Design</span>
       <h2>Modern Web Design Trends</h2>
       <p class="date">Irfan Jibril · August 20, 2026</p>
-      <p>Web design continues to change as new technologies and user expectations develop. Modern websites focus on clean layouts, accessibility, responsiveness, and enjoyable user experiences.</p>
+      <p>
+        Web design continues to change as new technologies and user expectations develop. Modern
+        websites focus on clean layouts, accessibility, responsiveness, and enjoyable user
+        experiences.
+      </p>
       <h3>Clean Layouts</h3>
-      <p>Simple layouts make websites easier to understand. Good spacing, readable typography, and organized sections help visitors quickly find the information they need.</p>
+      <p>
+        Simple layouts make websites easier to understand. Good spacing, readable typography, and
+        organized sections help visitors quickly find the information they need.
+      </p>
       <h3>Responsive Design</h3>
-      <p>People visit websites using phones, tablets, laptops, and desktop computers. Responsive design allows a website to adapt to different screen sizes.</p>
+      <p>
+        People visit websites using phones, tablets, laptops, and desktop computers. Responsive
+        design allows a website to adapt to different screen sizes.
+      </p>
       <h3>Interactive Experiences</h3>
-      <p>Animations, transitions, buttons, and interactive elements can make websites feel more engaging when they are used carefully.</p>
+      <p>
+        Animations, transitions, buttons, and interactive elements can make websites feel more
+        engaging when they are used carefully.
+      </p>
       <h3>Conclusion</h3>
-      <p>Modern web design is about more than making a website look good. A successful website should also be fast, accessible, responsive, and easy to use.</p>
+      <p>
+        Modern web design is about more than making a website look good. A successful website should
+        also be fast, accessible, responsive, and easy to use.
+      </p>
+    </section>
+    <section class="comments" id="comments">
+      <h2>Comments</h2>
+      <form class="comment-form">
+        <input
+          type="text"
+          id="commentName"
+          placeholder="Your name"
+          maxlength="50"
+          required
+        /><textarea
+          id="commentText"
+          placeholder="Write your comment..."
+          rows="5"
+          maxlength="1000"
+          required
+        ></textarea
+        ><button type="submit">Post Comment</button>
+      </form>
+      <div id="commentStatus" aria-live="polite"></div>
+      <div id="commentList"></div>
       <a href="tech.html#blog" class="back-btn">← Back to Blogs</a>
     </section>
-    <section class="comments-section" id="comments">
-      <h2>Comments</h2>
-      <form id="comment-form">
-        <input id="comment-name" type="text" placeholder="Your name" maxlength="80" required />
-        <textarea id="comment-text" placeholder="Write a comment..." maxlength="1000" required></textarea>
-        <button type="submit">Post Comment</button>
-      </form>
-      <p id="comments-status" aria-live="polite"></p>
-      <div id="comments-list"></div>
-    </section>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-config.js"></script>
-    <script src="comments.js"></script>
+    
+    <script src="b.js"></script>
     <script>
-      if (localStorage.getItem("futureTechTheme") === "light") document.body.classList.add("secret-mode");
+      const postId = "design";
+    </script>
+
+    <script>
+      if (localStorage.getItem("futureTechTheme") === "light") {
+        document.body.classList.add("secret-mode");
+      } else {
+        document.body.classList.remove("secret-mode");
+      }
     </script>
   </body>
 </html>

@@ -1,87 +1,48 @@
-const loginForm = document.getElementById("login-form");
+document.addEventListener("DOMContentLoaded", async () => {
+  const form = document.querySelector(".auth-form");
+  const status = document.querySelector(".auth-status");
+  const submit = form?.querySelector("button[type=submit]");
+  const params = new URLSearchParams(location.search);
+  const fallback = "tech.html#blog";
+  const next = safeNext(params.get("next"));
 
-if (loginForm) {
-  loginForm.addEventListener("submit", function (e) {
-    e.preventDefault();
+  function safeNext(value) {
+    if (!value || !value.startsWith("/") || value.startsWith("//")) return fallback;
+    return value;
+  }
 
-    const email = document.getElementById("login-email").value.trim().toLowerCase();
-    const password = document.getElementById("login-password").value;
-
-    const user = users().find(function (u) {
-      return u.email === email && u.password === password;
-    });
-
-    if (!user) {
-      show(" Wrong email or password.");
-      return;
+  try {
+    const response = await fetch("/api/auth/me", { credentials: "same-origin" });
+    if (response.ok) {
+      const data = await response.json();
+      if (data.user) location.replace(next);
     }
+  } catch (_) {}
 
-    localStorage.setItem(SESSION_KEY, JSON.stringify({
-      id: user.id,
-      name: user.name,
-      email: user.email
-    }));
-
-    show(" Login successful!");
-    setTimeout(function () {
-      location.href = "blog-ai.html";
-    }, 500);
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    status.textContent = "";
+    if (submit) submit.disabled = true;
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Something went wrong.");
+      location.replace(next);
+    } catch (error) {
+      status.textContent = error.message;
+    } finally {
+      if (submit) submit.disabled = false;
+    }
   });
-}
 
-
-const signupForm = document.getElementById("signup-form");
-
-if (signupForm) {
-  signupForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const name = document.getElementById("signup-name").value.trim();
-    const email = document.getElementById("signup-email").value.trim().toLowerCase();
-    const password = document.getElementById("signup-password").value;
-    const confirm = document.getElementById("signup-confirm").value;
-
-    if (!name || !email || !password || !confirm) {
-      show(" Please fill in all fields.");
-      return;
-    }
-
-    if (password.length < 6) {
-      show("Password must be at least 6 characters.");
-      return;
-    }
-
-    if (password !== confirm) {
-      show(" Passwords do not match.");
-      return;
-    }
-
-    const list = users();
-
-    if (list.some(function (u) { return u.email === email; })) {
-      show(" Email already exists. Please log in.");
-      return;
-    }
-
-    const user = {
-      id: Date.now().toString(),
-      name: name,
-      email: email,
-      password: password
-    };
-
-    list.push(user);
-    saveUsers(list);
-
-    localStorage.setItem(SESSION_KEY, JSON.stringify({
-      id: user.id,
-      name: user.name,
-      email: user.email
-    }));
-
-    show(" Account created!");
-    setTimeout(function () {
-      location.href = "blog-ai.html";
-    }, 500);
-  });
-}
+  if (localStorage.getItem("futureTechTheme") === "light") {
+    document.body.classList.add("secret-mode");
+  }
+});

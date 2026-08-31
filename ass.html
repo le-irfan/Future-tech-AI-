@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="icon" href="favicon.png" />
+  </head>
+
+  <body>
+    <button onclick="" id="idk">click me</button>
+
+    <script>
+      if (localStorage.getItem("futureTechTheme") === "light") {
+        document.body.classList.add("secret-mode");
+      } else {
+        document.body.classList.remove("secret-mode");
+      }
+    </script>
+  </body>
+  <script>
+    but = document.getElementById("idk");
+    ev = document.addEventListener("click", function () {
+      but.textContent = "check the console";
+    });
+    student = {
+      name: "irfan",
+      age: 15,
+      grade: "75",
+    };
+    document.addEventListener("click", function () {
+      console.log(student);
+    });
+    if (student.grade >= 50) {
+      console.log("pass");
+    } else {
+      console.log("fail");
+    }
+  </script>
+</html>
