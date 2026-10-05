@@ -212,7 +212,44 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, { ...r.rows[0], username:user.username, isOwner:true });
     }
 
-    if (url.pathname === "/api/health") return sendJson(res, 200, { status: "ok" });
+    if (url.pathname === "/api/health" && req.method === "GET") {
+      if (!process.env.DATABASE_URL) {
+        return sendJson(res, 200, { status: "ok", database: "not configured" });
+      }
+      try {
+        await pool.query("SELECT 1");
+        return sendJson(res, 200, { status: "ok", database: "connected" });
+      } catch (error) {
+        console.error("Database health check failed:", error);
+        return sendJson(res, 503, { status: "error", database: "unavailable" });
+      }
+    }
+
+    if (url.pathname === "/api/chat" && req.method === "POST") {
+      const input = JSON.parse(await body(req));
+      const message = String(input.message || "").trim();
+      if (!message) return sendJson(res, 400, { error: "Message is required." });
+      if (message.length > 500) return sendJson(res, 400, { error: "Message is too long." });
+
+      const q = message.toLowerCase();
+      let reply = "I'm NEXVORA AI. Ask me about artificial intelligence, robotics, web development, or this website.";
+
+      if (q.includes("hello") || q.includes("hi") || q.includes("hey")) {
+        reply = "Hello! I'm NEXVORA AI. How can I help you learn about technology?";
+      } else if (q.includes("what is ai") || q === "ai") {
+        reply = "Artificial intelligence is technology that enables computers to perform tasks such as recognizing patterns, understanding language, and making predictions.";
+      } else if (q.includes("robot")) {
+        reply = "Robotics combines software, sensors, electronics, and mechanical systems to build machines that can sense and act in the real world.";
+      } else if (q.includes("web development") || q.includes("website")) {
+        reply = "Web development combines HTML for structure, CSS for design, JavaScript for browser interaction, and backend technologies such as Node.js for server-side features.";
+      } else if (q.includes("database") || q.includes("postgres")) {
+        reply = "NEXVORA AI uses PostgreSQL for persistent data such as users, sessions, and comments. The Node.js server connects to it through the pg package.";
+      } else if (q.includes("nexvora")) {
+        reply = "NEXVORA AI is your AI and future-technology website, with a Node.js backend, PostgreSQL database, authentication, comments, and responsive pages.";
+      }
+
+      return sendJson(res, 200, { reply });
+    }
     if (req.method === "GET") {
       let requested = decodeURIComponent(url.pathname);
       if (requested === "/") requested = "/tech.html";
