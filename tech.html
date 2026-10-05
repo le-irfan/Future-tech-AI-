@@ -512,6 +512,24 @@
         </div>
       </div>
     </section>
+    <section class="nexvora-chat" id="chat">
+      <div class="nexvora-chat-header">
+        <span>AI ASSISTANT</span>
+        <h2>Chat with NEXVORA <span>AI</span></h2>
+        <p>Ask about AI, robotics, web development, databases, or this website.</p>
+      </div>
+      <div class="nexvora-chat-box">
+        <div id="nexvoraChatMessages" class="nexvora-chat-messages" aria-live="polite">
+          <div class="nexvora-chat-message bot">Hi! I'm NEXVORA AI. Ask me a technology question.</div>
+        </div>
+        <form id="nexvoraChatForm" class="nexvora-chat-form">
+          <input id="nexvoraChatInput" type="text" maxlength="500" placeholder="Type your question..." autocomplete="off" required />
+          <button type="submit">Send</button>
+        </form>
+        <div id="nexvoraChatStatus" class="nexvora-chat-status" aria-live="polite"></div>
+      </div>
+    </section>
+
 <section class="contact" id="contact">
     <div class="contact-container">
 
@@ -586,6 +604,8 @@
 </footer>
 
 
+
+    <script src="chat.js"></script>
 
     <script>
       const secretRobot = document.getElementById("secretCore");
