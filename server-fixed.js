@@ -212,17 +212,14 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, { ...r.rows[0], username:user.username, isOwner:true });
     }
 
-    if (url.pathname === "/api/health" && req.method === "GET") {
-      if (!process.env.DATABASE_URL) {
-        return sendJson(res, 200, { status: "ok", database: "not configured" });
-      }
-      try {
-        await pool.query("SELECT 1");
-        return sendJson(res, 200, { status: "ok", database: "connected" });
-      } catch (error) {
-        console.error("Database health check failed:", error);
-        return sendJson(res, 503, { status: "error", database: "unavailable" });
-      }
+    // Render health checks must be fast and must not depend on PostgreSQL.
+    // Database connectivity is checked separately by the application APIs.
+    if ((url.pathname === "/health" || url.pathname === "/api/health") && req.method === "GET") {
+      return sendJson(res, 200, {
+        status: "ok",
+        service: "FutureTechX",
+        databaseConfigured: Boolean(process.env.DATABASE_URL)
+      });
     }
 
     if (url.pathname === "/api/chat" && req.method === "POST") {
@@ -326,4 +323,4 @@ user data, server secrets, or files unless they are provided in the conversation
 });
 
 setupDatabase().catch(e => console.error("Database setup failed:", e));
-server.listen(PORT, () => console.log(`FutureTechX server running on port ${PORT}`));
+server.listen(PORT, "0.0.0.0", () => console.log(`FutureTechX server running on port ${PORT}`));
