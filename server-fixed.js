@@ -228,27 +228,66 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === "/api/chat" && req.method === "POST") {
       const input = JSON.parse(await body(req));
       const message = String(input.message || "").trim();
+      const history = Array.isArray(input.history) ? input.history : [];
+
       if (!message) return sendJson(res, 400, { error: "Message is required." });
       if (message.length > 500) return sendJson(res, 400, { error: "Message is too long." });
 
-      const q = message.toLowerCase();
-      let reply = "I'm NEXVORA AI. Ask me about artificial intelligence, robotics, web development, or this website.";
-
-      if (q.includes("hello") || q.includes("hi") || q.includes("hey")) {
-        reply = "Hello! I'm NEXVORA AI. How can I help you learn about technology?";
-      } else if (q.includes("what is ai") || q === "ai") {
-        reply = "Artificial intelligence is technology that enables computers to perform tasks such as recognizing patterns, understanding language, and making predictions.";
-      } else if (q.includes("robot")) {
-        reply = "Robotics combines software, sensors, electronics, and mechanical systems to build machines that can sense and act in the real world.";
-      } else if (q.includes("web development") || q.includes("website")) {
-        reply = "Web development combines HTML for structure, CSS for design, JavaScript for browser interaction, and backend technologies such as Node.js for server-side features.";
-      } else if (q.includes("database") || q.includes("postgres")) {
-        reply = "NEXVORA AI uses PostgreSQL for persistent data such as users, sessions, and comments. The Node.js server connects to it through the pg package.";
-      } else if (q.includes("nexvora")) {
-        reply = "NEXVORA AI is your AI and future-technology website, with a Node.js backend, PostgreSQL database, authentication, comments, and responsive pages.";
+      if (!process.env.OPENAI_API_KEY) {
+        return sendJson(res, 503, {
+          error: "NEXVORA AI is not configured yet. Add OPENAI_API_KEY to the server environment."
+        });
       }
 
-      return sendJson(res, 200, { reply });
+      const cleanHistory = history
+        .filter(m => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
+        .slice(-10)
+        .map(m => ({ role: m.role, content: m.content.slice(0, 2000) }));
+
+      const inputMessages = [
+        ...cleanHistory,
+        { role: "user", content: message }
+      ];
+
+      try {
+        const aiResponse = await fetch("https://api.openai.com/v1/responses", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: process.env.OPENAI_MODEL || "gpt-6-luna",
+            instructions: `You are NEXVORA AI, the helpful AI assistant for the FutureTechX website.
+Be accurate, concise, friendly, and useful. You can discuss AI, robotics, programming,
+web development, databases, science, technology, and the FutureTechX website.
+If asked about the website, explain that it uses HTML/CSS/JavaScript, a Node.js backend,
+PostgreSQL, authentication, and this AI chat. Do not claim to have access to private
+user data, server secrets, or files unless they are provided in the conversation.`,
+            input: inputMessages,
+            max_output_tokens: 700
+          })
+        });
+
+        const data = await aiResponse.json();
+
+        if (!aiResponse.ok) {
+          console.error("OpenAI API error:", data);
+          return sendJson(res, 502, {
+            error: data?.error?.message || "The AI service returned an error."
+          });
+        }
+
+        const reply = String(data.output_text || "").trim();
+        if (!reply) {
+          return sendJson(res, 502, { error: "The AI returned an empty response." });
+        }
+
+        return sendJson(res, 200, { reply });
+      } catch (error) {
+        console.error("NEXVORA AI request failed:", error);
+        return sendJson(res, 502, { error: "Could not reach the AI service." });
+      }
     }
     if (req.method === "GET") {
       let requested = decodeURIComponent(url.pathname);
