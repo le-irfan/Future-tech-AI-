@@ -265,7 +265,8 @@ If asked about the website, explain that it uses HTML/CSS/JavaScript, a Node.js 
 PostgreSQL, authentication, and this AI chat. Do not claim to have access to private
 user data, server secrets, or files unless they are provided in the conversation.`,
             input: inputMessages,
-            max_output_tokens: 700
+            reasoning: { effort: "low" },
+            max_output_tokens: 1200
           })
         });
 
@@ -278,9 +279,31 @@ user data, server secrets, or files unless they are provided in the conversation
           });
         }
 
-        const reply = String(data.output_text || "").trim();
+        // The SDK exposes output_text as a convenience property, but this server
+        // calls the REST API directly, so extract text from the raw output array too.
+        const reply = String(
+          data.output_text ||
+          (Array.isArray(data.output)
+            ? data.output
+                .filter(item => item && item.type === "message")
+                .flatMap(item => Array.isArray(item.content) ? item.content : [])
+                .filter(part => part && part.type === "output_text")
+                .map(part => part.text || "")
+                .join("\n")
+            : "")
+        ).trim();
+
         if (!reply) {
-          return sendJson(res, 502, { error: "The AI returned an empty response." });
+          console.error("OpenAI response contained no output text:", {
+            status: data.status,
+            incomplete_details: data.incomplete_details,
+            output_types: Array.isArray(data.output) ? data.output.map(item => item?.type) : []
+          });
+          return sendJson(res, 502, {
+            error: data.incomplete_details?.reason
+              ? `The AI response was incomplete: ${data.incomplete_details.reason}`
+              : "The AI returned no text. Try again."
+          });
         }
 
         return sendJson(res, 200, { reply });
