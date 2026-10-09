@@ -1251,3 +1251,33 @@ body.secret-mode .r .core {
     animation: none;
 }
 
+
+
+/* Final light-mode robot override: remove every cyan/blue tint from its glow. */
+body.secret-mode .r .head,
+body.secret-mode .r .body {
+    border-color: #ff0000 !important;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.16), 0 0 22px rgba(255, 0, 0, 0.12) !important;
+    filter: none !important;
+    animation: none !important;
+}
+
+body.secret-mode .r .eye {
+    background: #ff0000 !important;
+    box-shadow: 0 0 12px rgba(255, 0, 0, 0.28) !important;
+    filter: none !important;
+    animation: none !important;
+}
+
+body.secret-mode .r .core {
+    border-color: #ff0000 !important;
+    color: #ff0000 !important;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.14) !important;
+    filter: none !important;
+    animation: none !important;
+}
+
+body.secret-mode .r,
+body.secret-mode .r * {
+    text-shadow: none !important;
+}
