@@ -1227,3 +1227,27 @@ div.footer {
 .nexvora-chat-form button{padding:13px 20px;border:0;border-radius:10px;cursor:pointer;font-weight:700}
 .nexvora-chat-status{min-height:20px;margin-top:8px;font-size:13px;opacity:.75}
 @media(max-width:600px){.nexvora-chat{width:94%;padding:40px 8px;margin:45px auto}.nexvora-chat-box{padding:12px}.nexvora-chat-messages{height:260px}.nexvora-chat-form{flex-direction:column}.nexvora-chat-form button{width:100%}.nexvora-chat-message{max-width:92%}}
+
+/* Keep the homepage robot's glow in sync with light mode. */
+body.secret-mode .r .head {
+    border-color: var(--cyan);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.28);
+}
+
+body.secret-mode .r .body {
+    border-color: var(--cyan);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.28);
+}
+
+body.secret-mode .r .eye {
+    background: var(--cyan);
+    box-shadow: 0 0 16px rgba(255, 0, 0, 0.35);
+}
+
+body.secret-mode .r .core {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    box-shadow: 0 0 14px rgba(255, 0, 0, 0.2);
+    animation: none;
+}
+
