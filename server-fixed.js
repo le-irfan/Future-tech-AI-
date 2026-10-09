@@ -134,6 +134,8 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
   try {
     if (url.pathname === "/api/auth/signup" && req.method === "POST") {
+      await databaseReady;
+      if (databaseSetupError) return sendJson(res, 503, { error: "The database is unavailable. Check the DATABASE_URL setting and database logs in Render." });
       const i = JSON.parse(await body(req));
       const username = String(i.username || "").trim();
       const password = String(i.password || "");
@@ -151,6 +153,8 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (url.pathname === "/api/auth/login" && req.method === "POST") {
+      await databaseReady;
+      if (databaseSetupError) return sendJson(res, 503, { error: "The database is unavailable. Check the DATABASE_URL setting and database logs in Render." });
       const i = JSON.parse(await body(req));
       const username = String(i.username || "").trim();
       const password = String(i.password || "");
@@ -163,11 +167,15 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (url.pathname === "/api/auth/me" && req.method === "GET") {
+      await databaseReady;
+      if (databaseSetupError) return sendJson(res, 503, { error: "The database is unavailable. Check the DATABASE_URL setting and database logs in Render." });
       const user = await getUser(req);
       return sendJson(res, 200, { user: user ? { id: user.id, username: user.username } : null });
     }
 
     if (url.pathname === "/api/auth/logout" && req.method === "POST") {
+      await databaseReady;
+      if (databaseSetupError) return sendJson(res, 503, { error: "The database is unavailable. Check the DATABASE_URL setting and database logs in Render." });
       const token = parseCookies(req).ftx_session;
       if (token && process.env.DATABASE_URL) await pool.query("DELETE FROM sessions WHERE token_hash=$1", [tokenHash(token)]);
       return sendJson(res, 200, { ok: true }, clearSessionCookie());
@@ -322,5 +330,9 @@ user data, server secrets, or files unless they are provided in the conversation
   }
 });
 
-setupDatabase().catch(e => console.error("Database setup failed:", e));
+let databaseSetupError = null;
+const databaseReady = setupDatabase().catch(e => {
+  databaseSetupError = e;
+  console.error("Database setup failed:", e);
+});
 server.listen(PORT, "0.0.0.0", () => console.log(`FutureTechX server running on port ${PORT}`));
