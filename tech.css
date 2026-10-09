@@ -414,6 +414,11 @@ body.secret-mode {
     --muted: #775252;
 }
 
+/* Match the dark-mode cyan ambient glow with a red glow in light mode. */
+body.secret-mode .intro {
+    background: radial-gradient(circle at 80% 50%, rgba(255, 0, 0, .13), transparent 35%) !important;
+}
+
 body.secret-mode header {
     background: rgba(242, 247, 251, .92);
     border-bottom-color: rgba(255, 0, 0, .2);
