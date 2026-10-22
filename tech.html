@@ -611,27 +611,27 @@
 
     <script>
       const secretRobot = document.getElementById("secretCore");
+      const faviconLink = document.querySelector('link[rel="icon"]');
 
-      secretRobot.addEventListener("dblclick", function () {
-        document.body.classList.toggle("secret-mode");
-
-        if (document.body.classList.contains("secret-mode")) {
-          localStorage.setItem("futureTechTheme", "light");
-        } else {
-          localStorage.setItem("futureTechTheme", "dark");
+      function syncTheme() {
+        const isLight = document.body.classList.contains("secret-mode");
+        localStorage.setItem("futureTechTheme", isLight ? "light" : "dark");
+        if (faviconLink) {
+          faviconLink.href = isLight ? "/favicon-light.svg?v=1" : "/favicon.svg?v=2";
         }
-        if (localStorage.getItem("futureTechTheme") === "light") {
-          document.body.classList.add("secret-mode");
-        }
-      });
-    </script>
+      }
 
-    <script>
       if (localStorage.getItem("futureTechTheme") === "light") {
         document.body.classList.add("secret-mode");
       } else {
         document.body.classList.remove("secret-mode");
       }
+      syncTheme();
+
+      secretRobot.addEventListener("dblclick", function () {
+        document.body.classList.toggle("secret-mode");
+        syncTheme();
+      });
     </script>
   </body>
 </html>
