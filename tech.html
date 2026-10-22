@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NEXVORA AI</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
-    <link rel="alternate icon" href="/favicon.svg?v=2" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3" />
+    <link rel="alternate icon" href="favicon.svg?v=3" />
     <link rel="stylesheet" href="tech.css" />
     <link
       rel="stylesheet"
@@ -611,14 +611,15 @@
 
     <script>
       const secretRobot = document.getElementById("secretCore");
-      const faviconLink = document.querySelector('link[rel="icon"]');
+      const faviconLinks = document.querySelectorAll('link[rel~="icon"]');
 
       function syncTheme() {
         const isLight = document.body.classList.contains("secret-mode");
         localStorage.setItem("futureTechTheme", isLight ? "light" : "dark");
-        if (faviconLink) {
-          faviconLink.href = isLight ? "/favicon-light.svg?v=1" : "/favicon.svg?v=2";
-        }
+        const faviconPath = isLight ? "favicon-light.svg?v=2" : "favicon.svg?v=3";
+        faviconLinks.forEach((link) => {
+          link.href = faviconPath;
+        });
       }
 
       if (localStorage.getItem("futureTechTheme") === "light") {
