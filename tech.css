@@ -1286,3 +1286,68 @@ body.secret-mode .r,
 body.secret-mode .r * {
     text-shadow: none !important;
 }
+
+
+/* Keep the main navigation fixed while scrolling. */
+body > header {
+    position: fixed !important;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-width: none;
+    height: 75px;
+    margin: 0;
+    padding: 0 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    z-index: 9999;
+}
+
+/* Prevent anchor-linked sections from hiding behind the fixed navigation. */
+html {
+    scroll-padding-top: 85px;
+}
+
+@media (max-width: 900px) {
+    body > header {
+        padding-left: 3%;
+        padding-right: 3%;
+    }
+
+    body > header nav ul {
+        gap: 14px;
+    }
+}
+
+@media (max-width: 700px) {
+    body > header {
+        height: auto;
+        min-height: 75px;
+        padding: 12px 4%;
+        align-items: flex-start;
+        gap: 12px;
+        flex-direction: column;
+    }
+
+    body > header nav {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 4px;
+    }
+
+    body > header nav ul {
+        width: max-content;
+        gap: 18px;
+    }
+
+    body > header nav ul li a {
+        white-space: nowrap;
+    }
+
+    html {
+        scroll-padding-top: 115px;
+    }
+}
